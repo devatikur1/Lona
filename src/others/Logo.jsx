@@ -1,9 +1,10 @@
-const Logo = ({ size=20 }) => (
+const Logo = ({ size = 20, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 18 18"
     width={size}
     height={size}
+    className={`${className}`}
   >
     <defs>
       <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">

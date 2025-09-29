@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Ellipsis } from "lucide-react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Ellipsis, MenuIcon } from "lucide-react";
 import Option from "./header/Option";
+import { AppContext } from "../../context/AppContext";
 
 export default function Header() {
   const [showOption, setShowOption] = useState(false);
   const buttonRef = useRef(null);
   const optionRef = useRef(null);
+
+  const { setShowHeader } = useContext(AppContext);
 
   // Outside click detection
   useEffect(() => {
@@ -27,16 +30,23 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full relative select-none">
-      <nav className="flex justify-between items-center px-4 py-2 cursor-pointer">
+    <header
+      style={{ filter: "drop-shadow(0 2px 2px #080808)" }}
+      className="w-full relative select-none h-full bg-[#080808]"
+    >
+      <nav className="w-full flex justify-between items-center px-2 py-2 cursor-pointer h-full">
         {/* Website name */}
         <div
           className="px-4 py-1.5 rounded-xl 
                         bg-transparent border border-transparent 
                         hover:bg-[#0d0d0d] hover:border-[#252525] 
-                        transition-colors duration-300 ease-in-out"
+                        transition-colors duration-300 ease-in-out
+                        flex items-center gap-3"
         >
-          <span className="text-[2.2rem] leading-none font-medium">Lona</span>
+          <div className="flex md:hidden" onClick={() => setShowHeader((prev) => !prev)}>
+            <MenuIcon size={20} />
+          </div>
+          <span className="text-[2rem] leading-none font-medium">Lukka</span>
         </div>
 
         {/* Dropdown show/unshow btn */}

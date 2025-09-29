@@ -24,6 +24,45 @@
   --chatbox-clr: #161619;
 }
 
+@layer utilities {
+  /* Custom scroll */
+  .scrollCustom::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .scrollCustom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollCustom::-webkit-scrollbar-thumb {
+    background: #212123;
+    border-radius: 8px;
+    border: 2px solid transparent;
+  }
+
+  .scrollCustom::-webkit-scrollbar-thumb:hover {
+    background: #884dff;
+  }
+
+  /* Firefox support */
+  .scrollCustom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--secend-clr) transparent;
+  }
+
+  /* Thin / hide scrollbar */
+  .thin-scrollCustom::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none !important;
+  }
+
+  .thin-scrollCustom {
+    scrollbar-width: 1px; /* Firefox hide */
+  }
+}
+
 body {
   width: 100vw;
   min-height: 100vh;
@@ -31,3 +70,25 @@ body {
 }
 
 /* ----------------------------------------------specific style----------------------------------------------- */
+
+.newChatOption {
+  border-radius: 12px;
+  border: 0.124rem solid #22232700;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.newChatOption:hover {
+  border-radius: 12px;
+  border: 0.124rem solid #222327;
+  background: transparent;
+}
+
+.newChatOption .newChatKeyWord {
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.newChatOption:hover .newChatKeyWord {
+  opacity: 1;
+}

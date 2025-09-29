@@ -1,6 +1,6 @@
 import React from "react";
 
-const NewChat = ({size = 20}) => {
+const NewChat = ({ size = 18, className = "" }) => {
   return (
     <svg
       width={size}
@@ -8,8 +8,7 @@ const NewChat = ({size = 20}) => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="stroke-[2] "
-      strokeWidth="2"
+      className={`stroke-[2] ${className}`}
     >
       <path
         d="M10 4V4C8.13623 4 7.20435 4 6.46927 4.30448C5.48915 4.71046 4.71046 5.48915 4.30448 6.46927C4 7.20435 4 8.13623 4 10V13.6C4 15.8402 4 16.9603 4.43597 17.816C4.81947 18.5686 5.43139 19.1805 6.18404 19.564C7.03968 20 8.15979 20 10.4 20H14C15.8638 20 16.7956 20 17.5307 19.6955C18.5108 19.2895 19.2895 18.5108 19.6955 17.5307C20 16.7956 20 15.8638 20 14V14"
