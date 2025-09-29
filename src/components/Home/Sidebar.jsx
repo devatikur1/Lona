@@ -58,13 +58,17 @@ export default function Sidebar() {
       </AnimatePresence>
 
       {/* Desktop Sidebar - animate width between collapsed/expanded */}
-      <DextopSidebar
-        windowWidth={windowWidth}
-        showHeader={showHeader}
-        setShowHeader={setShowHeader}
-        baseSidebarClasses={baseSidebarClasses}
-        groupedItems={groupedItems}
-      />
+      <AnimatePresence>
+        {windowWidth >= 768 && (
+          <DextopSidebar
+            windowWidth={windowWidth}
+            showHeader={showHeader}
+            setShowHeader={setShowHeader}
+            baseSidebarClasses={baseSidebarClasses}
+            groupedItems={groupedItems}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

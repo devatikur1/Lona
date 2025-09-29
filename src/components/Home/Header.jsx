@@ -32,7 +32,7 @@ export default function Header() {
   return (
     <header
       style={{ filter: "drop-shadow(0 2px 2px #080808)" }}
-      className="w-full relative select-none h-full bg-[#080808]"
+      className="w-full relative select-none h-[70px] bg-[#080808]"
     >
       <nav className="w-full flex justify-between items-center px-2 py-2 cursor-pointer h-full">
         {/* Website name */}
@@ -43,7 +43,10 @@ export default function Header() {
                         transition-colors duration-300 ease-in-out
                         flex items-center gap-3"
         >
-          <div className="flex md:hidden" onClick={() => setShowHeader((prev) => !prev)}>
+          <div
+            className="flex md:hidden"
+            onClick={() => setShowHeader((prev) => !prev)}
+          >
             <MenuIcon size={20} />
           </div>
           <span className="text-[2rem] leading-none font-medium">Lukka</span>

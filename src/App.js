@@ -13,7 +13,7 @@ export default function App() {
       >
         <Sidebar />
       </section>
-      <section className="w-full h-[70px]">
+      <section className="w-full">
         <Header />
       </section>
     </aside>
