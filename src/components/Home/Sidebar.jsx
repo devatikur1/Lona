@@ -7,7 +7,7 @@ import DextopSidebar from "./sidebar/DextopSidebar";
 export default function Sidebar() {
   const { showHeader, setShowHeader } = useContext(AppContext);
 
-  //  window width 
+  //  window width
   const getInitialWidth = () =>
     typeof window !== "undefined" ? window.innerWidth : 1200;
   const [windowWidth, setWindowWidth] = useState(getInitialWidth());

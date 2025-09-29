@@ -1,21 +1,35 @@
 import React from "react";
-import Header from "./components/Home/Header";
-import Sidebar from "./components/Home/Sidebar";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import LoggedUiLayout from "./layout/LoggedUiLayout";
+import GuestLayout from "./layout/GuestLayout"; // guest user এর জন্য আলাদা layout
 
 export default function App() {
-  return (
-    <aside className="flex">
-      <section
-        style={{
-          borderRight: "0.124rem solid #212123",
-        }}
-        className="h-screen"
-      >
-        <Sidebar />
-      </section>
-      <section className="w-full">
-        <Header />
-      </section>
-    </aside>
+  const logged = false;
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      logged ? (
+        // Logged in user layout
+        <Route path="/" element={<LoggedUiLayout />}>
+          <Route index element={<HomePage />} />
+          {/* logged user এর অন্য routes */}
+        </Route>
+      ) : (
+        // Guest user layout
+        <Route path="/" element={<GuestLayout />}>
+          <Route index element={<HomePage />} />
+          {/* guest user routes */}
+        </Route>
+      )
+    )
   );
+
+  return <RouterProvider router={router} />;
 }
