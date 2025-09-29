@@ -1,18 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import Logo from "../../others/Logo";
-import { EllipsisVertical, History, Search, Settings } from "lucide-react";
-import NewChat from "../../others/NewChat";
-import clsx from "clsx";
 import { AppContext } from "../../context/AppContext";
-import { AnimatePresence, motion } from "motion/react";
-import ToggleBtn from "../../others/ToggleBtn";
+import { AnimatePresence } from "motion/react";
 import MobileSideBar from "./sidebar/MobileSideBar";
 import DextopSidebar from "./sidebar/DextopSidebar";
 
 export default function Sidebar() {
   const { showHeader, setShowHeader } = useContext(AppContext);
 
-  // 안전하게 초기 window width সেট করা (SSR safety)
+  //  window width 
   const getInitialWidth = () =>
     typeof window !== "undefined" ? window.innerWidth : 1200;
   const [windowWidth, setWindowWidth] = useState(getInitialWidth());
@@ -33,7 +28,7 @@ export default function Sidebar() {
     return acc;
   }, {});
 
-  // resize listener (clean up on unmount)
+  // resize listener
   useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
