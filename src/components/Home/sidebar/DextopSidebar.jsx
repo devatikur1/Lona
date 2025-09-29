@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import React from "react";
 import Logo from "../../../others/Logo";
 import ToggleBtn from "../../../others/ToggleBtn";
-import { EllipsisVertical, History, Search, Settings } from "lucide-react";
+import { EllipsisVertical, History, Search } from "lucide-react";
 import NewChat from "../../../others/NewChat";
 import clsx from "clsx";
 
