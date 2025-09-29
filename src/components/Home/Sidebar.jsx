@@ -19,13 +19,6 @@ export default function Sidebar() {
     { id: "h3", title: "Vercel Domain Change React Project", date: "Today" },
     { id: "h4", title: "React Image Feed Component Issues", date: "September" },
     { id: "h5", title: "React Image Upload Component", date: "September" },
-    {
-      id: "h6",
-      title: "Firebase Authentication Code Analysis",
-      date: "September",
-    },
-    { id: "h7", title: "Free AI API Options 2025", date: "September" },
-    { id: "h8", title: "Exam Syllabus and Study Guide", date: "September" },
   ];
 
   // group items by date
@@ -48,13 +41,15 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Sidebar */}
-      {showHeader && windowWidth < 768 && (
-        <MobileSideBar
-          groupedItems={groupedItems}
-          setShowHeader={setShowHeader}
-        />
-      )}
+      <AnimatePresence>
+        {/* Mobile Sidebar */}
+        {showHeader && windowWidth < 768 && (
+          <MobileSideBar
+            groupedItems={groupedItems}
+            setShowHeader={setShowHeader}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Desktop Sidebar */}
       <AnimatePresence>
