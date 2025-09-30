@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import Header from "../Header";
 import RegisterTool from "./Part/RegisterTool";
 import Footer from "../Footer";
@@ -26,12 +25,9 @@ export default function RegisterFrom() {
   }, []);
 
   return (
-    <motion.div
+    <div
       ref={RegisterFrom}
       style={{ minWidth: registerFromWidth }}
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col"
     >
       <header className="min-h-[8vh] max-h-[8vh] w-[100%] flex justify-center items-center px-4">
@@ -43,6 +39,6 @@ export default function RegisterFrom() {
       <footer className="h-full flex justify-center items-end">
         <Footer />
       </footer>
-    </motion.div>
+    </div>
   );
 }

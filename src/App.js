@@ -11,6 +11,7 @@ import LoggedUiLayout from "./layout/LoggedUiLayout";
 import AuthRootLayout from "./layout/AuthRootLayout";
 import LogIn from "./pages/Auth/LogIn";
 import Register from "./pages/Auth/Register";
+import LoginMainFrom from "./components/Auth/logIn/LoginMainFrom";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -18,7 +19,9 @@ export default function App() {
       <Route path="/" element={<LoggedUiLayout />}>
         <Route index element={<HomePage />} />
         <Route path="account" element={<AuthRootLayout />}>
-          <Route path="sign-in" element={<LogIn />} />
+          <Route path="sign-in" element={<LogIn />}>
+            <Route path="?method=email" element={<LoginMainFrom />} />
+          </Route>
           <Route path="sign-up" element={<Register />} />
         </Route>
       </Route>

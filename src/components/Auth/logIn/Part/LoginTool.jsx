@@ -12,7 +12,10 @@ export default function LoginTool() {
         </h1>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-5">
+      <Link
+        to={"/account/sign-in?method=email"}
+        className="flex flex-col items-center justify-center gap-5"
+      >
         <button className="w-[85%] lg:w-[75%] opacity-[0.8] transition-all duration-500 hover:opacity-[1] bg-white text-[#080808] rounded-3xl flex justify-center items-center">
           <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
             <span>
@@ -52,7 +55,7 @@ export default function LoginTool() {
             <span className="text-[#fff]">Login with Github</span>
           </div>
         </button>
-      </div>
+      </Link>
 
       <div className="flex justify-center items-center mt-6 gap-2">
         <span className="text-sm lg:text-[0.9rem] xl:text-[1rem] text-[#acaaaa] text-center">
