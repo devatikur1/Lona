@@ -7,47 +7,89 @@ import Btn from "../AuthPart/Btn";
 import GoBack from "../AuthPart/GoBack";
 
 export default function LoginMainFrom() {
-  const [pass, setPass] = useState("");
+  // chechbox
   const [isChecked, setIsChecked] = useState(false);
-  const [emailIsUniceq, setEmailIsUniceq] = useState(false);
 
   // email
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [emailChecking, setEmailChecking] = useState(false);
+  const [emailAlredyAse, setEmailAlredyAse] = useState(false);
 
-  function CheckEmailIsUniceq() {
+  // pass
+  const [pass, setPass] = useState("");
+  const [isShowPass, setIsShowPass] = useState(false);
+  const [passErr, setPassErr] = useState(false);
+  const [passValid, setPassValid] = useState(false);
+  const [passChecking, setPassChecking] = useState(false);
+
+  function CheckemailAlredyAse() {
     setEmailChecking(true);
 
-    let emailIsValid =
-      email !== "" && email.includes("@") && email.includes(".com");
+    let emailIsValid = validateEmail(email);
 
     if (emailIsValid) {
       setEmailErr(false);
       setEmailValid(true);
-      setEmailIsUniceq(true);
+      setEmailAlredyAse(true);
     } else {
       setEmailErr(true);
       setEmailValid(false);
-      setEmailIsUniceq(false);
+      setEmailAlredyAse(false);
     }
 
     setEmailChecking(false);
   }
 
+  // email validation
   function emailvalidation(e) {
     setEmail(e.target.value);
     setEmailErr(false);
     setEmailValid(false);
-    setEmailIsUniceq(false);
+    setEmailAlredyAse(false);
   }
 
-  function LoginHandaler(e) {
-    e.prevenDefault();
-    console.log("Free");
-    
+  // pass validation
+  function passwordvalidation(e) {
+    setPass(e.target.value);
   }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validatePassword(pass) {
+    return pass.length >= 8;
+  }
+
+  function LoginHandler(e) {
+    e.preventDefault();
+
+    setEmailChecking(true);
+    setPassChecking(true);
+
+    const emailIsValid = validateEmail(email);
+    const passIsValid = validatePassword(pass);
+
+    setEmailErr(!emailIsValid);
+    setEmailValid(emailIsValid);
+    setEmailAlredyAse(emailIsValid); // For demo, pretend we check server
+
+    setPassErr(!passIsValid);
+    setPassValid(passIsValid);
+
+    if (emailIsValid && passIsValid && isChecked) {
+      // login logic
+      console.log(email, pass);
+      
+      console.log("Login success!");
+    }
+    
+    setEmailChecking(false);
+    setPassChecking(false);
+  }
+
 
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex items-center mx-auto flex-col">
@@ -58,7 +100,7 @@ export default function LoginMainFrom() {
       </section>
 
       <form
-        onSubmit={(e) => LoginHandaler(e)}
+        onSubmit={(e) => LoginHandler(e)}
         className="w-[80%] lg:w-[85%] xl:w-[95%] 2xl:w-[80%] flex flex-col gap-7"
       >
         <article className="flex flex-col gap-2 items-center justify-center">
@@ -72,14 +114,29 @@ export default function LoginMainFrom() {
             emailvalidation={emailvalidation}
           />
           <AnimatePresence>
-            {emailIsUniceq && <PassAndChechBox />}
+            {emailAlredyAse && (
+              <PassAndChechBox
+                // pass
+                pass={pass}
+                isShowPass={isShowPass}
+                setIsShowPass={setIsShowPass}
+                // pass validation
+                passErr={passErr}
+                passValid={passValid}
+                passChecking={passChecking}
+                passwordvalidation={passwordvalidation}
+                // cheackBox
+                isChecked={isChecked}
+                setIsChecked={setIsChecked}
+              />
+            )}
           </AnimatePresence>
         </article>
 
         <article className="flex flex-col items-center gap-3 justify-center">
           <Btn
-            CheckEmailIsUniceq={CheckEmailIsUniceq}
-            emailIsUniceq={emailIsUniceq}
+            CheckemailAlredyAse={CheckemailAlredyAse}
+            emailAlredyAse={emailAlredyAse}
           />
           <GoBack />
         </article>

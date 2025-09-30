@@ -1,11 +1,11 @@
 import React from "react";
 
-export default function Btn({ emailIsUniceq, CheckEmailIsUniceq }) {
+export default function Btn({ emailIsUniceq, CheckemailAlredyAse }) {
   return (
     <>
       {!emailIsUniceq && (
         <button
-          onClick={CheckEmailIsUniceq}
+          onClick={CheckemailAlredyAse}
           className="w-full opacity-[0.8] transition-all duration-500 hover:opacity-[1] bg-white text-[#080808] rounded-3xl flex justify-center items-center"
           type="button"
         >

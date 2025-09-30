@@ -98,26 +98,28 @@ body {
 
 /* input */
 
-.inputEmail {
+.input {
   background: #161619;
   outline: 1px solid #212123;
   padding: 8px 13px;
-  padding-right: 32px;
 }
 
-.inputEmail:focus {
+.input:focus {
   outline: 1px solid #fff;
 }
 
-.emailErr {
+.inputErr {
   background: #161619;
   outline: 1px solid #7f1d1d;
   padding: 8px 13px;
-  padding-right: 32px;
 }
 
-.emailErr:focus {
+.inputErr:focus {
   outline: 1px solid #7f1d1d;
+}
+
+.padding_right_32 {
+    padding-right: 32px;
 }
 
 .forgetBtn {
