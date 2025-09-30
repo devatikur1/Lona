@@ -13,7 +13,6 @@ import LogIn from "./pages/Auth/LogIn";
 import Register from "./pages/Auth/Register";
 
 export default function App() {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<LoggedUiLayout />}>
