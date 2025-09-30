@@ -145,7 +145,7 @@ export default function DextopSidebar({
               <div className="px-3 py-3 flex flex-col gap-2">
                 <article className="logoAndIconPrenet flex justify-center items-center p-2 mb-3">
                   <div className="dexLogo">
-                    <Logo size={30} />
+                    <Logo size={20} />
                   </div>
                 </article>
 

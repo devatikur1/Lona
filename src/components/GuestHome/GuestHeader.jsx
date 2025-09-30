@@ -1,8 +1,8 @@
+import { User } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
 export default function GuestHeader() {
-
   return (
     <header
       style={{ filter: "drop-shadow(0 2px 2px #080808)" }}
@@ -27,12 +27,26 @@ export default function GuestHeader() {
         </section>
 
         {/* Dropdown show/unshow btn */}
-        <div
-          className="px-2 py-1 rounded-xl 
-                        bg-transparent border border-transparent 
-                        hover:bg-[#0d0d0d] hover:border-[#252525]
-                        transition-colors duration-300 ease-in-out"
-        ></div>
+        <div className="flex gap-3">
+          <Link
+            style={{ padding: "4px 9px" }}
+            className="flex justify-center items-center gap-1 rounded-full bg-[#f9f8f6] border-[#252525]"
+          >
+            <User color="#252525" size={17} />
+            <span className="text-[0.98rem] text-[#252525] font-light leading-none">
+              Sign up
+            </span>
+          </Link>
+
+          <Link
+            style={{ padding: "5px 12px" }}
+            className="flex justify-center items-center gap-1 rounded-full bg-[#0d0d0d] border border-[#252525] "
+          >
+            <span className="text-[0.98rem] font-light leading-none">
+              Sign in
+            </span>
+          </Link>
+        </div>
       </nav>
     </header>
   );

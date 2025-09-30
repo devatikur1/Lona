@@ -8,26 +8,21 @@ import {
 
 import HomePage from "./pages/HomePage";
 import LoggedUiLayout from "./layout/LoggedUiLayout";
-import GuestLayout from "./layout/GuestLayout"; // guest user এর জন্য আলাদা layout
+import AuthRootLayout from "./layout/AuthRootLayout";
+import LogIn from "./pages/Auth/LogIn";
+import Register from "./pages/Auth/Register";
 
 export default function App() {
-  const logged = false;
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      logged ? (
-        // Logged in user layout
-        <Route path="/" element={<LoggedUiLayout />}>
-          <Route index element={<HomePage />} />
-          {/* logged user এর অন্য routes */}
+      <Route path="/" element={<LoggedUiLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="account" element={<AuthRootLayout />}>
+          <Route path="sign-in" element={<LogIn />} />
+          <Route path="sign-up" element={<Register />} />
         </Route>
-      ) : (
-        // Guest user layout
-        <Route path="/" element={<GuestLayout />}>
-          <Route index element={<HomePage />} />
-          {/* guest user routes */}
-        </Route>
-      )
+      </Route>
     )
   );
 
