@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../Header";
-import LoginTool from "./Part/RegisterTool";
+import RegisterTool from "./Part/RegisterTool";
 
 export default function RegisterFrom() {
   const RegisterFrom = useRef(null);
   const [registerFromWidth, setRegisterFromWidth] = useState(null);
-  // resize listener
 
+  // resize listener
   function handleResize() {
     setRegisterFromWidth(RegisterFrom.current.parentNode.offsetWidth);
   }
@@ -33,7 +33,7 @@ export default function RegisterFrom() {
         <Header />
       </header>
       <main className="h-[70vh] w-full flex items-center py-[15%] justify-center">
-        <LoginTool />
+        <RegisterTool />
       </main>
     </div>
   );

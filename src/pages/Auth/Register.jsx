@@ -1,7 +1,6 @@
 import ImagePart from "../../components/Auth/ImagePart";
 import RegisterFrom from "../../components/Auth/register/RegisterFrom";
 
-
 export default function Register() {
   return (
     <aside className="flex w-screen min-h-screen">

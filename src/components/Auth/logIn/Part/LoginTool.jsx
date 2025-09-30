@@ -6,15 +6,15 @@ import { Link } from "react-router-dom";
 export default function LoginTool() {
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex mx-auto flex-col">
-      <div className="flex justify-center items-center pb-14">
+      <div className="flex justify-center items-center pb-9 pt-5 md:pt-0 md:pb-14">
         <h1 className="text-[1.5rem] text-center lg:text-[1.55rem] xl:text-[2rem]">
           Log into your account
         </h1>
       </div>
 
       <div className="flex flex-col items-center justify-center gap-5">
-        <button className="w-[85%] md:w-[80%] lg:w-[75%] opacity-[0.8] transition-all duration-500 hover:opacity-[1] bg-white text-[#080808] rounded-3xl flex justify-center items-center">
-          <div className="flex items-center gap-3 py-[0.5rem]">
+        <button className="w-[85%] lg:w-[75%] opacity-[0.8] transition-all duration-500 hover:opacity-[1] bg-white text-[#080808] rounded-3xl flex justify-center items-center">
+          <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
             <span>
               <Mail color="#080808" size={19} />
             </span>
@@ -26,8 +26,8 @@ export default function LoginTool() {
           <hr className="h-[1px] bg-[#303030]/80 border-none w-full" />
         </div>
 
-        <button className="w-[85%] md:w-[80%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
-          <div className="flex items-center gap-3 py-[0.5rem]">
+        <button className="w-[85%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
+          <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
             <span>
               <Twitter color="#fff" size={19} />
             </span>
@@ -35,8 +35,8 @@ export default function LoginTool() {
           </div>
         </button>
 
-        <button className="w-[85%] md:w-[80%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
-          <div className="flex items-center gap-3 py-[0.5rem]">
+        <button className="w-[85%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
+          <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
             <span>
               <GoogleIcon size={18} />
             </span>
@@ -44,8 +44,8 @@ export default function LoginTool() {
           </div>
         </button>
 
-        <button className="w-[85%] md:w-[80%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
-          <div className="flex items-center gap-3 py-[0.5rem]">
+        <button className="w-[85%] lg:w-[75%] bg-[#080808] transition-all duration-500 hover:bg-[#1f1f22] border border-[#212123] rounded-3xl flex justify-center items-center">
+          <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
             <span>
               <Github color="#fff" size={19} />
             </span>
