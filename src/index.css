@@ -121,6 +121,9 @@ body {
 .padding_right_32 {
     padding-right: 32px;
 }
+.padding_right_52 {
+    padding-right: 52px;
+}
 
 .forgetBtn {
   position: relative;

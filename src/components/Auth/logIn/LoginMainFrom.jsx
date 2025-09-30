@@ -1,45 +1,59 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Email from "../AuthPart/Email";
 import PassAndChechBox from "../AuthPart/PassAndChechBox";
 import { AnimatePresence } from "motion/react";
 import Btn from "../AuthPart/Btn";
 import GoBack from "../AuthPart/GoBack";
+import { AppContext } from "../../../context/AppContext";
 
 export default function LoginMainFrom() {
+  // form
+  const [formStatus, setformStatus] = useState("sended"); // sending || error || sended
+
   // chechbox
   const [isChecked, setIsChecked] = useState(false);
+  const [checkBoxErr, setCheckBoxErr] = useState(false);
 
   // email
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
-  const [emailChecking, setEmailChecking] = useState(false);
-  const [emailAlredyAse, setEmailAlredyAse] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [IsEmailAlredyExits, setIsEmailAlredyExits] = useState(false);
 
   // pass
   const [pass, setPass] = useState("");
   const [isShowPass, setIsShowPass] = useState(false);
   const [passErr, setPassErr] = useState(false);
   const [passValid, setPassValid] = useState(false);
-  const [passChecking, setPassChecking] = useState(false);
+  const [passLoading, setPassLoading] = useState(false);
 
-  function CheckemailAlredyAse() {
-    setEmailChecking(true);
+  //context
+  const { userAuth } = useContext(AppContext);
+
+  // validateEmail
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  // IsCheckEmailAlredyExits
+  function IsCheckEmailAlredyExits() {
+    setEmailLoading(true);
 
     let emailIsValid = validateEmail(email);
 
     if (emailIsValid) {
       setEmailErr(false);
       setEmailValid(true);
-      setEmailAlredyAse(true);
+      setIsEmailAlredyExits(true);
     } else {
       setEmailErr(true);
       setEmailValid(false);
-      setEmailAlredyAse(false);
+      setIsEmailAlredyExits(false);
     }
 
-    setEmailChecking(false);
+    setEmailLoading(false);
   }
 
   // email validation
@@ -47,49 +61,73 @@ export default function LoginMainFrom() {
     setEmail(e.target.value);
     setEmailErr(false);
     setEmailValid(false);
-    setEmailAlredyAse(false);
+    setIsEmailAlredyExits(false);
   }
 
   // pass validation
-  function passwordvalidation(e) {
+  function passvalidation(e) {
     setPass(e.target.value);
+    setPassErr(false);
+    setPassValid(false);
+    setEmailLoading(false);
   }
 
-  function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // cheack validation
+  function checkBoxvalidation() {
+    setIsChecked((prev) => !prev);
+    setCheckBoxErr(false);
   }
 
-  function validatePassword(pass) {
-    return pass.length >= 8;
-  }
-
-  function LoginHandler(e) {
+  async function LoginHandler(e) {
     e.preventDefault();
+    setPassLoading(true);
 
-    setEmailChecking(true);
-    setPassChecking(true);
-
-    const emailIsValid = validateEmail(email);
-    const passIsValid = validatePassword(pass);
-
-    setEmailErr(!emailIsValid);
-    setEmailValid(emailIsValid);
-    setEmailAlredyAse(emailIsValid); // For demo, pretend we check server
-
-    setPassErr(!passIsValid);
-    setPassValid(passIsValid);
-
-    if (emailIsValid && passIsValid && isChecked) {
-      // login logic
-      console.log(email, pass);
-      
-      console.log("Login success!");
+    // password validation
+    if (pass.length < 8) {
+      setPassErr(true);
+      setPassValid(false);
+      setPassLoading(false);
+    } else {
+      setPassErr(false);
+      setPassValid(true);
+      setPassLoading(false);
     }
-    
-    setEmailChecking(false);
-    setPassChecking(false);
-  }
 
+    // checkbox validation
+    if (!isChecked) {
+      setCheckBoxErr(true);
+      setPassLoading(false);
+    }
+
+    if (pass.length < 8 || !isChecked) {
+      return;
+    }
+
+    setEmailErr(false);
+    setEmailValid(false);
+    setPassErr(false);
+    setPassValid(false);
+    setPassLoading(true);
+    setEmailLoading(true);
+
+    setformStatus("sending");
+
+    let { type } = await userAuth.logIn(email, pass);
+
+    if (type === "data") {
+      setformStatus("sended");
+      console.log("Login success!");
+      setEmailValid(true);
+      setPassValid(true);
+    } else if (type === "error") {
+      setformStatus("error");
+      setEmailErr(true);
+      setPassErr(true);
+    }
+
+    setEmailLoading(false);
+    setPassLoading(false);
+  }
 
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex items-center mx-auto flex-col">
@@ -109,25 +147,26 @@ export default function LoginMainFrom() {
             // validatin value
             emailErr={emailErr}
             emailValid={emailValid}
-            emailChecking={emailChecking}
+            emailLoading={emailLoading}
             // validation funtion
             emailvalidation={emailvalidation}
           />
           <AnimatePresence>
-            {emailAlredyAse && (
+            {IsEmailAlredyExits && (
               <PassAndChechBox
                 // pass
                 pass={pass}
+                passvalidation={passvalidation}
                 isShowPass={isShowPass}
                 setIsShowPass={setIsShowPass}
                 // pass validation
                 passErr={passErr}
                 passValid={passValid}
-                passChecking={passChecking}
-                passwordvalidation={passwordvalidation}
+                passLoading={passLoading}
                 // cheackBox
                 isChecked={isChecked}
-                setIsChecked={setIsChecked}
+                checkBoxvalidation={checkBoxvalidation}
+                checkBoxErr={checkBoxErr}
               />
             )}
           </AnimatePresence>
@@ -135,8 +174,9 @@ export default function LoginMainFrom() {
 
         <article className="flex flex-col items-center gap-3 justify-center">
           <Btn
-            CheckemailAlredyAse={CheckemailAlredyAse}
-            emailAlredyAse={emailAlredyAse}
+            IsCheckEmailAlredyExits={IsCheckEmailAlredyExits}
+            IsEmailAlredyExits={IsEmailAlredyExits}
+            formStatus={formStatus}
           />
           <GoBack />
         </article>
