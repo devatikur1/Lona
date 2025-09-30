@@ -95,3 +95,44 @@ body {
 .newChatOption:hover .newChatKeyWord {
   opacity: 1;
 }
+
+/* input */
+
+.inputEmail {
+  background: #161619;
+  outline: 1px solid #212123;
+  padding: 8px 13px;
+}
+
+.inputEmail:hover {
+  outline: 1px solid #fff;
+}
+
+.inputEmail:focus {
+  outline: 1px solid #fff;
+}
+
+.forgetBtn {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.forgetBtn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0; 
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.forgetBtn:hover::after {
+  width: 100%;
+}
+
+.forgetBtn::after {
+  transform-origin: left center;
+}

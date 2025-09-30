@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Header from "../Header";
 import LoginTool from "./Part/LoginTool";
 import Footer from "../Footer";
+import LoginMainFrom from "./LoginMainFrom";
 
-export default function LoginFrom() {
+export default function LoginFrom({ method }) {
   const loginFrom = useRef(null);
   const [loginFromWidth, setLoginFromWidth] = useState(null);
   // resize listener
@@ -25,20 +27,23 @@ export default function LoginFrom() {
   }, []);
 
   return (
-    <div
+    <motion.div
       ref={loginFrom}
       style={{ minWidth: loginFromWidth }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col"
     >
       <header className="min-h-[8vh] max-h-[8vh] w-[100%] flex justify-center items-center px-4">
         <Header />
       </header>
       <main className="h-[70vh] w-full flex items-center py-[15%] justify-center">
-        <LoginTool />
+        {method === "email" ? <LoginMainFrom /> : <LoginTool />}
       </main>
       <footer className="h-full flex justify-center items-end">
         <Footer />
       </footer>
-    </div>
+    </motion.div>
   );
 }
