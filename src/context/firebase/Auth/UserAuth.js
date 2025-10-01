@@ -52,6 +52,7 @@ const userAuth = {
     }
   },
 
+
   gihubSignIn: async () => {
     try {
       const githubRes = await signInWithPopup(auth, githubProvider);
@@ -96,6 +97,11 @@ const userAuth = {
       }
     });
   },
+
+  // logout
+  logOut : () => {
+    
+  }
 };
 
 export default userAuth;
