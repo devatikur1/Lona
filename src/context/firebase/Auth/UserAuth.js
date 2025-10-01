@@ -7,8 +7,16 @@ import {
   GithubAuthProvider,
   TwitterAuthProvider,
 } from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+
 import { app } from "../Firebase";
 const auth = getAuth(app);
+const fireStore = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
@@ -24,6 +32,13 @@ const userAuth = {
         password
       );
       const user = userCredential.user;
+      const userRef = doc(fireStore, "users", user.uid);
+      await setDoc(
+        userRef,
+        { atLastLogin: serverTimestamp() },
+        { merge: true }
+      );
+
       console.log("Login Success:", user);
       return { type: "data", user };
     } catch (error) {
@@ -36,10 +51,26 @@ const userAuth = {
     }
   },
 
-  googleSign: async () => {
+  googleSign: async (GooglesignUpUserLocationData) => {
     try {
       const googleRes = await signInWithPopup(auth, googleProvider);
       const user = googleRes.user;
+
+      const userRef = doc(fireStore, "users", user.uid);
+      await setDoc(
+        userRef,
+        {
+          id: user.uid,
+          name: user.displayName,
+          email: user.email,
+          profileImgUrl: user.photoURL,
+          atSignIn: serverTimestamp(),
+          atLastLogin: serverTimestamp(),
+          GooglesignUpUserLocationData,
+          chatID: user.id,
+        },
+        { merge: true }
+      );
 
       return { type: "data", user };
     } catch (error) {
@@ -52,11 +83,25 @@ const userAuth = {
     }
   },
 
-
-  gihubSignIn: async () => {
+  gihubSignIn: async (GIthubsignUpUserLocationData) => {
     try {
       const githubRes = await signInWithPopup(auth, githubProvider);
       const user = githubRes.user;
+      const userRef = doc(fireStore, "users", user.uid);
+      await setDoc(
+        userRef,
+        {
+          id: user.uid,
+          name: user.displayName,
+          email: user.email,
+          profileImgUrl: user.photoURL,
+          atSignIn: serverTimestamp(),
+          atLastLogin: serverTimestamp(),
+          GIthubsignUpUserLocationData,
+          chatID: user.id,
+        },
+        { merge: true }
+      );
 
       return { type: "data", user };
     } catch (error) {
@@ -69,10 +114,25 @@ const userAuth = {
     }
   },
 
-  XSignIn: async () => {
+  XSignIn: async (XsignUpUserLocationData) => {
     try {
       const result = await signInWithPopup(auth, twitterProvider);
       const user = result.user;
+      const userRef = doc(fireStore, "users", user.uid);
+      await setDoc(
+        userRef,
+        {
+          id: user.uid,
+          name: user.displayName,
+          email: user.email,
+          profileImgUrl: user.photoURL,
+          atSignIn: serverTimestamp(),
+          atLastLogin: serverTimestamp(),
+          XsignUpUserLocationData,
+          chatID: user.id,
+        },
+        { merge: true }
+      );
       console.log("Twitter User:", user);
       return { type: "data", user };
     } catch (error) {
@@ -99,9 +159,7 @@ const userAuth = {
   },
 
   // logout
-  logOut : () => {
-    
-  }
+  logOut: () => {},
 };
 
 export default userAuth;

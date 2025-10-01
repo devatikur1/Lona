@@ -1,6 +1,6 @@
-import React from 'react'
-import Email from '../AuthPart/Email';
-import { Link } from 'react-router-dom';
+import React from "react";
+import Email from "../AuthPart/Email";
+import { Link } from "react-router-dom";
 
 export default function RegisterMainForm() {
   return (
@@ -11,9 +11,7 @@ export default function RegisterMainForm() {
         </h1>
       </section>
 
-      <form
-        className="w-[80%] lg:w-[85%] xl:w-[95%] 2xl:w-[80%] flex flex-col gap-7"
-      >
+      <form className="w-[80%] lg:w-[85%] xl:w-[95%] 2xl:w-[80%] flex flex-col gap-7">
         {/* <article className="flex flex-col gap-2 items-center justify-center">
           <Email
             // email={email}

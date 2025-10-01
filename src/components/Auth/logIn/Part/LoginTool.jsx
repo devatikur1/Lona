@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import GoogleIcon from "../../../../others/GoogleIcon";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../../context/AppContext";
+import getFullLocationDetails from "../../../../Logic/GetFullLocationDetails";
 
 export default function LoginTool() {
   // sign in mathor
@@ -19,53 +20,59 @@ export default function LoginTool() {
   //context
   const { userAuth } = useContext(AppContext);
 
-  // googleAuthSignIn
-  async function googleAuthSignIn() {
-    setIsGoogleAuthDis(true);
-    setGoogleAuthStutas("loading");
-    let app = await userAuth.googleSign();
-    console.log(app);
-
-    if (app["type"] == "data") {
+    // googleAuthSignIn
+    async function googleAuthSignIn() {
+      const location = await getFullLocationDetails();
+      console.log(location);
+      setIsGoogleAuthDis(true);
+      setGoogleAuthStutas("loading");
+      let app = await userAuth.googleSign(location);
+      console.log(app);
+  
+      if (app["type"] == "data") {
+        setGoogleAuthStutas("normal");
+      } else if (app["type"] == "error") {
+        setGoogleAuthStutas("error");
+      }
       setGoogleAuthStutas("normal");
-    } else if (app["type"] == "error") {
-      setGoogleAuthStutas("error");
+      setIsGoogleAuthDis(false);
     }
-    setGoogleAuthStutas("normal");
-    setIsGoogleAuthDis(false);
-  }
-
-  // gihubSignIn
-  async function githubAuthSignIn() {
-    setIsGihubAuthSDis(true);
-    setGihubAuthStutas("loading");
-    let app = await userAuth.gihubSignIn();
-    console.log(app);
-
-    if (app["type"] == "data") {
-      setGihubAuthStutas("normal");
-    } else if (app["type"] == "error") {
-      setGihubAuthStutas("error");
+  
+    // gihubSignIn
+    async function githubAuthSignIn() {
+      const location = await getFullLocationDetails();
+      console.log(location);
+      setIsGihubAuthSDis(true);
+      setGihubAuthStutas("loading");
+      let app = await userAuth.gihubSignIn(location);
+      console.log(app);
+  
+      if (app["type"] == "data") {
+        setGihubAuthStutas("normal");
+      } else if (app["type"] == "error") {
+        setGihubAuthStutas("error");
+      }
+      setGoogleAuthStutas("normal");
+      setIsGihubAuthSDis(false);
     }
-    setGoogleAuthStutas("normal");
-    setIsGihubAuthSDis(false);
-  }
-
-  // XSign In
-  async function XAuthSignIn() {
-    setIsXAuthDis(true);
-    setXAuthStutas("loading");
-    let app = await userAuth.XSignIn();
-    console.log(app);
-
-    if (app["type"] == "data") {
+  
+    // XSign In
+    async function XAuthSignIn() {
+      const location = await getFullLocationDetails();
+      console.log(location);
+      setIsXAuthDis(true);
+      setXAuthStutas("loading");
+      let app = await userAuth.XSignIn(location);
+      console.log(app);
+  
+      if (app["type"] == "data") {
+        setXAuthStutas("normal");
+      } else if (app["type"] == "error") {
+        setXAuthStutas("error");
+      }
       setXAuthStutas("normal");
-    } else if (app["type"] == "error") {
-      setXAuthStutas("error");
+      setIsXAuthDis(false);
     }
-    setXAuthStutas("normal");
-    setIsXAuthDis(false);
-  }
 
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex mx-auto flex-col">

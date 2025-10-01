@@ -4,68 +4,75 @@ import React, { useContext, useState } from "react";
 import GoogleIcon from "../../../../others/GoogleIcon";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../../context/AppContext";
+import getFullLocationDetails from "../../../../Logic/GetFullLocationDetails";
 
 export default function RegisterTool() {
-    // sign in mathor
-    const [googleAuthStutas, setGoogleAuthStutas] = useState("normal");
-    const [gihubAuthStutas, setGihubAuthStutas] = useState("normal");
-    const [XAuthStutas, setXAuthStutas] = useState("normal");
-  
-    // sign box dis
-    const [IsXAuthDis, setIsXAuthDis] = useState(false);
-    const [IsGoogleAuthDis, setIsGoogleAuthDis] = useState(false);
-    const [IsGihubAuthSDis, setIsGihubAuthSDis] = useState(false);
-  
-    //context
-    const { userAuth } = useContext(AppContext);
-  
-    // googleAuthSignIn
-    async function googleAuthSignIn() {
-      setIsGoogleAuthDis(true);
-      setGoogleAuthStutas("loading");
-      let app = await userAuth.googleSign();
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setGoogleAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setGoogleAuthStutas("error");
-      }
+  // sign in mathor
+  const [googleAuthStutas, setGoogleAuthStutas] = useState("normal");
+  const [gihubAuthStutas, setGihubAuthStutas] = useState("normal");
+  const [XAuthStutas, setXAuthStutas] = useState("normal");
+
+  // sign box dis
+  const [IsXAuthDis, setIsXAuthDis] = useState(false);
+  const [IsGoogleAuthDis, setIsGoogleAuthDis] = useState(false);
+  const [IsGihubAuthSDis, setIsGihubAuthSDis] = useState(false);
+
+  //context
+  const { userAuth } = useContext(AppContext);
+
+  // googleAuthSignIn
+  async function googleAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsGoogleAuthDis(true);
+    setGoogleAuthStutas("loading");
+    let app = await userAuth.googleSign(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
       setGoogleAuthStutas("normal");
-      setIsGoogleAuthDis(false);
+    } else if (app["type"] == "error") {
+      setGoogleAuthStutas("error");
     }
-  
-    // gihubSignIn
-    async function githubAuthSignIn() {
-      setIsGihubAuthSDis(true);
-      setGihubAuthStutas("loading");
-      let app = await userAuth.gihubSignIn();
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setGihubAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setGihubAuthStutas("error");
-      }
-      setGoogleAuthStutas("normal");
-      setIsGihubAuthSDis(false);
+    setGoogleAuthStutas("normal");
+    setIsGoogleAuthDis(false);
+  }
+
+  // gihubSignIn
+  async function githubAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsGihubAuthSDis(true);
+    setGihubAuthStutas("loading");
+    let app = await userAuth.gihubSignIn(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
+      setGihubAuthStutas("normal");
+    } else if (app["type"] == "error") {
+      setGihubAuthStutas("error");
     }
-  
-    // XSign In
-    async function XAuthSignIn() {
-      setIsXAuthDis(true);
-      setXAuthStutas("loading");
-      let app = await userAuth.XSignIn();
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setXAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setXAuthStutas("error");
-      }
+    setGoogleAuthStutas("normal");
+    setIsGihubAuthSDis(false);
+  }
+
+  // XSign In
+  async function XAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsXAuthDis(true);
+    setXAuthStutas("loading");
+    let app = await userAuth.XSignIn(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
       setXAuthStutas("normal");
-      setIsXAuthDis(false);
+    } else if (app["type"] == "error") {
+      setXAuthStutas("error");
     }
+    setXAuthStutas("normal");
+    setIsXAuthDis(false);
+  }
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex mx-auto flex-col">
       <div className="flex justify-center items-center pb-9 pt-5 md:pt-0 md:pb-14">
