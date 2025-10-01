@@ -30,7 +30,6 @@ export default function RegisterTool() {
       });
 
       const { latitude, longitude } = position.coords;
-
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
       );
@@ -62,60 +61,54 @@ export default function RegisterTool() {
     }
   }
 
-
-  // googleAuthSignIn
   async function googleAuthSignIn() {
-    const location = await getFullLocationDetails();
-    console.log(location);
     setIsGoogleAuthDis(true);
     setGoogleAuthStutas("loading");
-    let app = await userAuth.googleSign(location);
-    console.log(app);
-
-    if (app["type"] == "data") {
-      setGoogleAuthStutas("normal");
-    } else if (app["type"] == "error") {
+    try {
+      const loc = await getFullLocationDetails();
+      console.log(loc);
+      const app = await userAuth.googleSign(loc);
+      console.log(app);
+      setGoogleAuthStutas(app.type === "data" ? "normal" : "error");
+    } catch (err) {
       setGoogleAuthStutas("error");
+    } finally {
+      setIsGoogleAuthDis(false);
     }
-    setGoogleAuthStutas("normal");
-    setIsGoogleAuthDis(false);
   }
 
-  // gihubSignIn
   async function githubAuthSignIn() {
-    const location = await getFullLocationDetails();
-    console.log(location);
     setIsGihubAuthSDis(true);
     setGihubAuthStutas("loading");
-    let app = await userAuth.gihubSignIn(location);
-    console.log(app);
-
-    if (app["type"] == "data") {
-      setGihubAuthStutas("normal");
-    } else if (app["type"] == "error") {
+    try {
+      const loc = await getFullLocationDetails();
+      console.log(loc);
+      const app = await userAuth.gihubSignIn(loc);
+      console.log(app);
+      setGihubAuthStutas(app.type === "data" ? "normal" : "error");
+    } catch (err) {
       setGihubAuthStutas("error");
+    } finally {
+      setIsGihubAuthSDis(false);
     }
-    setGoogleAuthStutas("normal");
-    setIsGihubAuthSDis(false);
   }
 
-  // XSign In
   async function XAuthSignIn() {
-    const location = await getFullLocationDetails();
-    console.log(location);
     setIsXAuthDis(true);
     setXAuthStutas("loading");
-    let app = await userAuth.XSignIn(location);
-    console.log(app);
-
-    if (app["type"] == "data") {
-      setXAuthStutas("normal");
-    } else if (app["type"] == "error") {
+    try {
+      const loc = await getFullLocationDetails();
+      console.log(loc);
+      const app = await userAuth.XSignIn(loc);
+      console.log(app);
+      setXAuthStutas(app.type === "data" ? "normal" : "error");
+    } catch (err) {
       setXAuthStutas("error");
+    } finally {
+      setIsXAuthDis(false);
     }
-    setXAuthStutas("normal");
-    setIsXAuthDis(false);
   }
+
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex mx-auto flex-col">
       <div className="flex justify-center items-center pb-9 pt-5 md:pt-0 md:pb-14">
