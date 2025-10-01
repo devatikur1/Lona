@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
-import { app } from "./firebase/Firebase";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
 import userAuth from "./firebase/Auth/UserAuth";
 
 export default function AppContextProvider({ children }) {
