@@ -8,9 +8,13 @@ export default function AppContextProvider({ children }) {
   const [userData, setUserData] = useState(false);
 
   useEffect(() => {
-    userAuth.detectedUser();
-    console.log(userAuth.detectedUser());
-    setLogged(true);
+    let user = userAuth.detectedUser();
+    console.log(user);
+    if (user !== "No user found") {
+      setLogged(true);
+    } else {
+      setLogged(false);
+    }
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

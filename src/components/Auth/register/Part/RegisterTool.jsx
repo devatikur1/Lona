@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import GoogleIcon from "../../../../others/GoogleIcon";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../../context/AppContext";
-import getFullLocationDetails from "../../../../Logic/GetFullLocationDetails";
 
 export default function RegisterTool() {
   // sign in mathor
@@ -19,6 +18,50 @@ export default function RegisterTool() {
 
   //context
   const { userAuth } = useContext(AppContext);
+
+  async function getFullLocationDetails() {
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+
+      if (!response.ok) {
+        return {
+          latitude,
+          longitude,
+          address: {},
+          displayName: "Unknown Location",
+        };
+      }
+
+      const data = await response.json();
+      return {
+        latitude,
+        longitude,
+        address: data.address || {},
+        displayName: data.display_name || "Unknown Location",
+      };
+    } catch (err) {
+      console.error("Location fetch error:", err.message);
+      return {
+        latitude: null,
+        longitude: null,
+        address: {},
+        displayName: "Unknown Location",
+      };
+    }
+  }
+
 
   // googleAuthSignIn
   async function googleAuthSignIn() {

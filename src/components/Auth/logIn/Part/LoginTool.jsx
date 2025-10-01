@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import GoogleIcon from "../../../../others/GoogleIcon";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../../context/AppContext";
-import getFullLocationDetails from "../../../../Logic/GetFullLocationDetails";
 
 export default function LoginTool() {
   // sign in mathor
@@ -20,59 +19,102 @@ export default function LoginTool() {
   //context
   const { userAuth } = useContext(AppContext);
 
-    // googleAuthSignIn
-    async function googleAuthSignIn() {
-      const location = await getFullLocationDetails();
-      console.log(location);
-      setIsGoogleAuthDis(true);
-      setGoogleAuthStutas("loading");
-      let app = await userAuth.googleSign(location);
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setGoogleAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setGoogleAuthStutas("error");
+  async function getFullLocationDetails() {
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+
+      if (!response.ok) {
+        return {
+          latitude,
+          longitude,
+          address: {},
+          displayName: "Unknown Location",
+        };
       }
-      setGoogleAuthStutas("normal");
-      setIsGoogleAuthDis(false);
+
+      const data = await response.json();
+      return {
+        latitude,
+        longitude,
+        address: data.address || {},
+        displayName: data.display_name || "Unknown Location",
+      };
+    } catch (err) {
+      console.error("Location fetch error:", err.message);
+      return {
+        latitude: null,
+        longitude: null,
+        address: {},
+        displayName: "Unknown Location",
+      };
     }
-  
-    // gihubSignIn
-    async function githubAuthSignIn() {
-      const location = await getFullLocationDetails();
-      console.log(location);
-      setIsGihubAuthSDis(true);
-      setGihubAuthStutas("loading");
-      let app = await userAuth.gihubSignIn(location);
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setGihubAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setGihubAuthStutas("error");
-      }
+  }
+
+  // googleAuthSignIn
+  async function googleAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsGoogleAuthDis(true);
+    setGoogleAuthStutas("loading");
+    let app = await userAuth.googleSign(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
       setGoogleAuthStutas("normal");
-      setIsGihubAuthSDis(false);
+    } else if (app["type"] == "error") {
+      setGoogleAuthStutas("error");
     }
-  
-    // XSign In
-    async function XAuthSignIn() {
-      const location = await getFullLocationDetails();
-      console.log(location);
-      setIsXAuthDis(true);
-      setXAuthStutas("loading");
-      let app = await userAuth.XSignIn(location);
-      console.log(app);
-  
-      if (app["type"] == "data") {
-        setXAuthStutas("normal");
-      } else if (app["type"] == "error") {
-        setXAuthStutas("error");
-      }
+    setGoogleAuthStutas("normal");
+    setIsGoogleAuthDis(false);
+  }
+
+  // gihubSignIn
+  async function githubAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsGihubAuthSDis(true);
+    setGihubAuthStutas("loading");
+    let app = await userAuth.gihubSignIn(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
+      setGihubAuthStutas("normal");
+    } else if (app["type"] == "error") {
+      setGihubAuthStutas("error");
+    }
+    setGoogleAuthStutas("normal");
+    setIsGihubAuthSDis(false);
+  }
+
+  // XSign In
+  async function XAuthSignIn() {
+    const location = await getFullLocationDetails();
+    console.log(location);
+    setIsXAuthDis(true);
+    setXAuthStutas("loading");
+    let app = await userAuth.XSignIn(location);
+    console.log(app);
+
+    if (app["type"] == "data") {
       setXAuthStutas("normal");
-      setIsXAuthDis(false);
+    } else if (app["type"] == "error") {
+      setXAuthStutas("error");
     }
+    setXAuthStutas("normal");
+    setIsXAuthDis(false);
+  }
 
   return (
     <div className="w-[100%] sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex mx-auto flex-col">
