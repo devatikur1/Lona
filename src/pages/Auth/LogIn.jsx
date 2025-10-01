@@ -11,12 +11,13 @@ export default function LogIn() {
   const method = searchParams.get("method");
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if (logged) {
-      navigate("/");
-      navigate("/account");
-    }
-  }, [logged, navigate]);
+  // useEffect(() => {
+  //   if (logged) {
+  //     navigate("/account")
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [logged]);
+  
 
   return (
     <aside className="flex w-screen min-h-screen overflow-x-hidden overscroll-y-auto scrollCustom scrollVeiwNone *:select-none">

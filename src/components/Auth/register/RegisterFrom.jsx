@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import Header from "../Header";
 import RegisterTool from "./Part/RegisterTool";
 import Footer from "../Footer";
+import RegisterMainForm from "./RegisterMainForm";
 
-export default function RegisterFrom() {
+export default function RegisterFrom({ method }) {
   const RegisterFrom = useRef(null);
   const [registerFromWidth, setRegisterFromWidth] = useState(null);
 
@@ -29,7 +30,7 @@ export default function RegisterFrom() {
     <motion.div
       ref={RegisterFrom}
       style={{ minWidth: registerFromWidth }}
-      initial={{ opacity: 0}}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col"
@@ -38,7 +39,7 @@ export default function RegisterFrom() {
         <Header />
       </header>
       <main className="h-[70vh] w-full flex items-center py-[15%] justify-center">
-        <RegisterTool />
+        {method === "email" ? <RegisterMainForm /> : <RegisterTool />}
       </main>
       <footer className="h-full flex justify-center items-end">
         <Footer />

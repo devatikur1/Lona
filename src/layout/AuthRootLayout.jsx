@@ -1,10 +1,10 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom';
 
 export default function AuthRootLayout() {
   return (
     <>
-      <h1>gfh</h1>
-      {/* <Outlet /> */}
+      <Outlet />
     </>
   );
 }
