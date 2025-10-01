@@ -1,22 +1,41 @@
-import { motion } from "motion/react";
+// Removed duplicate import of motion
 import React from "react";
 import { Link } from "react-router-dom";
 import { EyesOff, EyesOn } from "../../../others/Eyes";
 import clsx from "clsx";
 import error from "../../../assets/error.png";
 import Success from "../../../others/Success";
+import { motion } from "motion/react";
 
 export default function RegisterPass({
   pass,
+  isShowPass,
+  setIsShowPass,
+  passErrMsgs,
   passErr,
   passValid,
   passLoading,
-  isShowPass,
-  setIsShowPass,
-  passvalidation,
+  passValidation,
 }) {
   return (
-    <div className="w-full flex flex-col gap-2">
+    <motion.div
+      initial={{
+        height: "0px",
+        opacity: 0,
+      }}
+      animate={{
+        height: "auto",
+        opacity: 1,
+      }}
+      exit={{
+        height: "0px",
+        opacity: 0,
+      }}
+      transition={{
+        duration: 1,
+      }}
+      className="w-full flex flex-col gap-2"
+    >
       <div className="flex justify-between items-center">
         <label htmlFor="password">Password</label>
         <Link className="forgetBtn text-[#acaaaa] text-xs">
@@ -33,7 +52,7 @@ export default function RegisterPass({
           id="password"
           type={isShowPass ? "text" : "password"}
           value={pass}
-          onChange={passvalidation}
+          onChange={passValidation}
         />
 
         <div className="absolute right-2 top-0 h-full flex justify-center items-center gap-2 cursor-pointer">
@@ -71,6 +90,6 @@ export default function RegisterPass({
       >
         Please enter a valid Password
       </span>
-    </div>
+    </motion.div>
   );
 }
