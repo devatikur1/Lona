@@ -1,5 +1,5 @@
 import React from "react";
-import Email from "../AuthPart/Email";
+// import Email from "../AuthPart/Email";
 import { Link } from "react-router-dom";
 
 export default function RegisterMainForm() {
