@@ -27,7 +27,7 @@ export default function RegisterEmail({
         opacity: 0,
       }}
       transition={{
-        duration: 1,
+        duration: 0.3,
       }}
       className="w-full flex flex-col gap-2"
     >

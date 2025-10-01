@@ -5,6 +5,12 @@ import { AnimatePresence } from "motion/react";
 import GoBack from "../AuthPart/GoBack";
 import RegisterEmail from "../AuthPart/RegisterEmail";
 import RegisterPass from "../AuthPart/RegisterPass";
+import RegisterFSName from "../AuthPart/RegisterFSName";
+import RegisterBtn from "./AuthPart/RegisterBtn";
+import CheackEmail from "./AuthPart/CheackEmail";
+import CheackPass from "./AuthPart/CheackPass";
+import { validateEmailFormat } from "../../../utils/emailValidation";
+import { passIsValid } from "../../../utils/passIsValid";
 import {
   getFirestore,
   collection,
@@ -13,8 +19,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { app } from "../../../context/firebase/Firebase";
-import CheackEmail from "./AuthPart/CheackEmail";
-import { validateEmailFormat } from "../../../utils/emailValidation";
+import { Mail } from "lucide-react";
 
 export default function RegisterMainForm() {
   // email state
@@ -25,23 +30,29 @@ export default function RegisterMainForm() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [isEmailExists, setIsEmailExists] = useState(false);
 
-  // email state
+  // password state
   const [pass, setPass] = useState("");
+  const [passMsg, setPassMsg] = useState(
+    "You must provide an password address"
+  );
   const [isShowPass, setIsShowPass] = useState(false);
   const [passErr, setPassErr] = useState(false);
-  const [passErrMsgs, setPassErrMsgs] = useState([]);
   const [passValid, setPassValid] = useState(false);
-  const [passLoading, setPassLoading] = useState(false);
+
+  // First name & Last name
+  const [firstName, setFirstName] = useState("");
+  const [firstNameErr, setFirstNameErr] = useState(false);
+  const [lastName, setLastName] = useState("");
+  const [lastNameErr, setLastNameErr] = useState(false);
 
   const db = getFirestore(app);
 
-  // Firebase + format check
+  // ---------------- Email Validation ----------------
   async function IsCheckEmailValidation() {
     setEmailLoading(true);
     setEmailErr(false);
     setEmailValid(false);
 
-    // 1. Format validation
     const { isValid, message } = validateEmailFormat(email);
     if (!isValid) {
       setEmailErr(true);
@@ -50,7 +61,6 @@ export default function RegisterMainForm() {
       return;
     }
 
-    // 2. Firestore check
     try {
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("email", "==", email));
@@ -77,7 +87,6 @@ export default function RegisterMainForm() {
     }
   }
 
-  // handle email typing
   function emailvalidation(e) {
     setEmail(e.target.value);
     setEmailErr(false);
@@ -85,21 +94,77 @@ export default function RegisterMainForm() {
     setIsEmailExists(false);
   }
 
-  // handle Pass typing
+  // ---------------- Password Validation ----------------
   function passValidation(e) {
-    setPass(e.target.value);
+    const value = e.target.value;
+    setPass(value);
+    setPassValid(false);
+    setPassErr(false);
+  }
+
+  function checkPassword() {
+    const { isValid} = passIsValid(pass);
+    setPassValid(isValid);
+    setPassErr(!isValid);
+    if (pass === "") {
+      setPassMsg("You must provide an password address");
+    } 
+    if (pass !== "" && !isValid) {
+      setPassMsg("Please completed the password rules.");
+    }
+  }
+
+  // ---------------- Name Validation ----------------
+  function checkName() {
+    let valid = true;
+    if (firstName.trim() === "") {
+      setFirstNameErr(true);
+      valid = false;
+    } else setFirstNameErr(false);
+
+    if (lastName.trim() === "") {
+      setLastNameErr(true);
+      valid = false;
+    } else setLastNameErr(false);
+
+    return valid;
+  }
+
+  async function HandleSubmit(e) {
+    e.preventDefault();
+    let valid = checkName();
+    if (!valid) return;
+    console.log(email, firstName, lastName, pass);
+    
   }
 
   return (
     <div className="w-full sm:w-[80%] md:w-[53%] lg:w-[80%] xl:w-[55%] flex items-center mx-auto flex-col">
-      <section className="flex justify-center items-center pb-9 pt-5 md:pt-0 md:pb-14">
-        <h1 className="text-[1.5rem] text-center lg:text-[1.55rem] xl:text-[2rem]">
-          Sign up with your email
-        </h1>
-      </section>
+      {/* Step 1: Email */}
+      {emailValid === false ? (
+        <section className="flex justify-center items-center pb-9 pt-5 md:pt-0 md:pb-14">
+          <h1 className="text-[1.5rem] text-center lg:text-[1.55rem] xl:text-[2rem]">
+            Sign up with your email
+          </h1>
+        </section>
+      ) : (
+        <section className="flex flex-col justify-center items-center gap-3 pb-9 pt-5 md:pt-0 md:pb-14">
+          <h1 className="text-center text-[2rem]">Complete your sign up</h1>
+          <div className="flex justify-center">
+            <div className="flex items-center gap-2 rounded-full border text-sm font-medium px-3 py-1 border-[#212123] bg-[#161619]">
+              <Mail color={"#acaaaa"} size={15} />
+              <span className="text-[0.8rem] font-thin">{email}</span>
+            </div>
+          </div>
+        </section>
+      )}
 
-      <form className="w-[80%] lg:w-[85%] xl:w-[95%] 2xl:w-[80%] flex flex-col gap-7">
+      <form
+        onSubmit={HandleSubmit}
+        className="w-[80%] lg:w-[85%] xl:w-[95%] 2xl:w-[80%] flex flex-col gap-7"
+      >
         <article className="flex flex-col gap-2 items-center justify-center">
+          {/* Email Step */}
           <AnimatePresence>
             {!emailValid && (
               <RegisterEmail
@@ -112,27 +177,49 @@ export default function RegisterMainForm() {
               />
             )}
           </AnimatePresence>
+
+          {/* Password Step */}
           <AnimatePresence>
-            {!isEmailExists && emailValid && (
+            {!isEmailExists && emailValid && !passValid && (
               <RegisterPass
                 pass={pass}
                 isShowPass={isShowPass}
                 setIsShowPass={setIsShowPass}
-                passErrMsgs={passErrMsgs}
                 passErr={passErr}
                 passValid={passValid}
-                passLoading={passLoading}
                 passValidation={passValidation}
+                passMsg={passMsg}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Name Step */}
+          <AnimatePresence>
+            {passValid && emailValid && (
+              <RegisterFSName
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                firstNameErr={firstNameErr}
+                setFirstNameErr={setFirstNameErr}
+                lastNameErr={lastNameErr}
+                setLastNameErr={setLastNameErr}
               />
             )}
           </AnimatePresence>
         </article>
 
+        {/* Action Buttons */}
         <article className="flex flex-col items-center gap-3 justify-center">
           {!emailValid && (
             <CheackEmail IsCheckEmailValidation={IsCheckEmailValidation} />
           )}
-          <GoBack />
+          {!isEmailExists && emailValid && !passValid && (
+            <CheackPass checkPassword={checkPassword} />
+          )}
+          {passValid && emailValid && <RegisterBtn />}
+          <GoBack link={"/account/sign-up"} />
         </article>
       </form>
 

@@ -178,7 +178,7 @@ export default function LoginMainFrom() {
             IsEmailAlredyExits={IsEmailAlredyExits}
             formStatus={formStatus}
           />
-          <GoBack />
+          <GoBack link={"/account/sign-up"} />
         </article>
       </form>
 
