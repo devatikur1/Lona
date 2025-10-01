@@ -1,5 +1,5 @@
 // RegisterMainForm.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
 import GoBack from "../AuthPart/GoBack";
@@ -20,8 +20,15 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../context/firebase/Firebase";
 import { Mail } from "lucide-react";
+import { getOS } from "../../../hooks/useGetOs";
+import { getGeoLocation } from "../../../hooks/useGetGeoLocation";
+import { getData } from "../../../hooks/useGetData";
+import { AppContext } from "../../../context/AppContext";
 
 export default function RegisterMainForm() {
+  // form
+  const [fromStatus, setFromStatus] = useState("normal");
+
   // email state
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState(false);
@@ -44,6 +51,9 @@ export default function RegisterMainForm() {
   const [firstNameErr, setFirstNameErr] = useState(false);
   const [lastName, setLastName] = useState("");
   const [lastNameErr, setLastNameErr] = useState(false);
+
+  // constext
+  const { userAuth } = useContext(AppContext);
 
   const db = getFirestore(app);
 
@@ -103,12 +113,12 @@ export default function RegisterMainForm() {
   }
 
   function checkPassword() {
-    const { isValid} = passIsValid(pass);
+    const { isValid } = passIsValid(pass);
     setPassValid(isValid);
     setPassErr(!isValid);
     if (pass === "") {
       setPassMsg("You must provide an password address");
-    } 
+    }
     if (pass !== "" && !isValid) {
       setPassMsg("Please completed the password rules.");
     }
@@ -130,12 +140,64 @@ export default function RegisterMainForm() {
     return valid;
   }
 
+  // location funtion
+  async function getLocationInfo() {
+    let geo = { latitude: null, longitude: null };
+    let data = {
+      countryName: null,
+      countryCode: null,
+      continent: null,
+      locality: null,
+      city: null,
+    };
+    const OS = getOS();
+
+    try {
+      geo = await getGeoLocation();
+    } catch (err) {
+      console.log(`User denied location, continuing with null values ${err}`);
+    }
+
+    if (geo.latitude && geo.longitude) {
+      try {
+        data = await getData(geo.latitude, geo.longitude);
+      } catch (err) {
+        console.log(`Geo Data fetch failed, continuing with nulls ${err}`);
+      }
+    }
+
+    // final loc object
+    return {
+      languages: navigator.languages,
+      country: data.countryName || null,
+      countryCode: data.countryCode || null,
+      continent: data.continent || null,
+      locality: data.locality || null,
+      city: data.city || null,
+      latitude: geo.latitude || null,
+      longitude: geo.longitude || null,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      browser: navigator.userAgent,
+      os: OS,
+      deviceType: /Mobi|Android/i.test(navigator.userAgent)
+        ? "Mobile"
+        : "Desktop",
+    };
+  }
+
   async function HandleSubmit(e) {
     e.preventDefault();
     let valid = checkName();
     if (!valid) return;
     console.log(email, firstName, lastName, pass);
-    
+    let fullName = `${firstName} + " " + ${lastName}`;
+    try {
+      let location = await getLocationInfo();
+      let app = await userAuth.signUp(email, pass, fullName, location);
+      setFromStatus(app.type === "data" ? "normal" : "error");
+    } catch (error) {
+      setFromStatus("error");
+    }
   }
 
   return (
@@ -218,18 +280,18 @@ export default function RegisterMainForm() {
           {!isEmailExists && emailValid && !passValid && (
             <CheackPass checkPassword={checkPassword} />
           )}
-          {passValid && emailValid && <RegisterBtn />}
+          {passValid && emailValid && <RegisterBtn fromStatus={fromStatus} />}
           <GoBack link={"/account/sign-up"} />
         </article>
       </form>
 
       <section className="flex justify-center items-center mt-6 gap-2">
         <span className="text-sm lg:text-[0.9rem] xl:text-[1rem] text-[#acaaaa] text-center">
-          Don't have an account?
+          Already have an account?
         </span>
         <Link to={"/account/sign-up"}>
           <span className="text-sm lg:text-[0.9rem] xl:text-[1rem] text-white text-center">
-            Sign up
+            Sign in
           </span>
         </Link>
       </section>

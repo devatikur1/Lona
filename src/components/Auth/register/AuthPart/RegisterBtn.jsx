@@ -1,8 +1,9 @@
 import React from "react";
 
-export default function RegisterBtn() {
+export default function RegisterBtn({ fromStatus }) {
   return (
     <button
+      disabled={fromStatus === "loading"}
       className="w-full opacity-[0.8] transition-all duration-500 hover:opacity-[1] bg-white text-[#080808] rounded-3xl flex justify-center items-center"
       type="submit"
     >

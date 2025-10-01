@@ -6,13 +6,9 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   TwitterAuthProvider,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 import { app } from "../Firebase";
 const auth = getAuth(app);
@@ -50,6 +46,34 @@ const userAuth = {
       };
     }
   },
+  signUp: async (email, password, fullName, location) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      const userRef = doc(fireStore, "users", user.uid);
+      await setDoc(userRef, {
+        id: user.uid,
+        name: fullName,
+        email: email,
+        profileImgUrl: null,
+        atSignIn: serverTimestamp(),
+        atLastLogin: serverTimestamp(),
+        Probider: "email",
+        location,
+      });
+      return { type: "data", user };
+    } catch (error) {
+      return {
+        type: "error",
+        errorCode: error.code,
+        errorMessage: error.message,
+      };
+    }
+  },
 
   googleSign: async (location) => {
     try {
@@ -66,6 +90,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
+          Probider: "google",
           location,
         },
         { merge: true }
@@ -96,6 +121,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
+          Probider: "github",
           location,
         },
         { merge: true }
@@ -126,6 +152,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
+          Probider: "x",
           location,
         },
         { merge: true }
