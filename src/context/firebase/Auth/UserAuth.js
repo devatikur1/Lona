@@ -67,7 +67,6 @@ const userAuth = {
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           GooglesignUpUserLocationData,
-          chatID: user.id,
         },
         { merge: true }
       );
@@ -98,7 +97,6 @@ const userAuth = {
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           GIthubsignUpUserLocationData,
-          chatID: user.id,
         },
         { merge: true }
       );
@@ -129,7 +127,6 @@ const userAuth = {
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           XsignUpUserLocationData,
-          chatID: user.id,
         },
         { merge: true }
       );
