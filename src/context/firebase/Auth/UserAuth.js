@@ -51,7 +51,7 @@ const userAuth = {
     }
   },
 
-  googleSign: async (GooglesignUpUserLocationData) => {
+  googleSign: async (location) => {
     try {
       const googleRes = await signInWithPopup(auth, googleProvider);
       const user = googleRes.user;
@@ -66,7 +66,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
-          GooglesignUpUserLocationData,
+          location,
         },
         { merge: true }
       );
@@ -82,7 +82,7 @@ const userAuth = {
     }
   },
 
-  gihubSignIn: async (GIthubsignUpUserLocationData) => {
+  gihubSignIn: async (location) => {
     try {
       const githubRes = await signInWithPopup(auth, githubProvider);
       const user = githubRes.user;
@@ -96,7 +96,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
-          GIthubsignUpUserLocationData,
+          location,
         },
         { merge: true }
       );
@@ -112,7 +112,7 @@ const userAuth = {
     }
   },
 
-  XSignIn: async (XsignUpUserLocationData) => {
+  XSignIn: async (location) => {
     try {
       const result = await signInWithPopup(auth, twitterProvider);
       const user = result.user;
@@ -126,7 +126,7 @@ const userAuth = {
           profileImgUrl: user.photoURL,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
-          XsignUpUserLocationData,
+          location,
         },
         { merge: true }
       );
@@ -146,11 +146,11 @@ const userAuth = {
   detectedUser: () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("User logged in:", user.uid);
-        return { type: "data", user };
+        console.log(user.uid);
+
+        return { type: "data", id: user };
       } else {
-        console.log("No user found");
-        return { type: "error", message: "No user logged in" };
+        return { type: "error" };
       }
     });
   },

@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 import userAuth from "./firebase/Auth/UserAuth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "./firebase/Firebase";
 
 export default function AppContextProvider({ children }) {
   const [showHeader, setShowHeader] = useState(false);
   const [logged, setLogged] = useState(false);
   const [userData, setUserData] = useState(false);
 
+  const auth = getAuth(app);
+
   useEffect(() => {
-    let user = userAuth.detectedUser();
-    console.log(user);
-    if (user !== "No user found") {
-      setLogged(true);
-    } else {
-      setLogged(false);
-    }
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user);
+
+        setLogged(true);
+      } else {
+        setLogged(false);
+      }
+    });
+
+    // cleanup
+    return () => unsubscribe();
   }, []);
 
   return (

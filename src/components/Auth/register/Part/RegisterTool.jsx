@@ -1,11 +1,17 @@
-/* eslint-disable eqeqeq */
+
 import { Github, Loader2, Mail, Twitter } from "lucide-react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GoogleIcon from "../../../../others/GoogleIcon";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../../context/AppContext";
+import { getOS } from "../../../../hooks/useGetOs";
+import { getGeoLocation } from "../../../../hooks/useGetGeoLocation";
+import { getData } from "../../../../hooks/useGetData";
 
 export default function RegisterTool() {
+  // some
+  const [loc, setLoc] = useState({});
+
   // sign in mathor
   const [googleAuthStutas, setGoogleAuthStutas] = useState("normal");
   const [gihubAuthStutas, setGihubAuthStutas] = useState("normal");
@@ -19,54 +25,68 @@ export default function RegisterTool() {
   //context
   const { userAuth } = useContext(AppContext);
 
-  async function getFullLocationDetails() {
+  async function getLocationInfo() {
+    let geo = { latitude: null, longitude: null };
+    let data = {
+      countryName: null,
+      countryCode: null,
+      continent: null,
+      locality: null,
+      city: null,
+    };
+    const OS = getOS();
+
     try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        });
-      });
-
-      const { latitude, longitude } = position.coords;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-      );
-
-      if (!response.ok) {
-        return {
-          latitude,
-          longitude,
-          address: {},
-          displayName: "Unknown Location",
-        };
-      }
-
-      const data = await response.json();
-      return {
-        latitude,
-        longitude,
-        address: data.address || {},
-        displayName: data.display_name || "Unknown Location",
-      };
+      geo = await getGeoLocation();
     } catch (err) {
-      console.error("Location fetch error:", err.message);
-      return {
-        latitude: null,
-        longitude: null,
-        address: {},
-        displayName: "Unknown Location",
-      };
+      console.log(`User denied location, continuing with null values ${err}`);
     }
+
+    if (geo.latitude && geo.longitude) {
+      try {
+        data = await getData(geo.latitude, geo.longitude);
+      } catch (err) {
+        console.log(`Geo Data fetch failed, continuing with nulls ${err}`);
+      }
+    }
+
+    // final loc object
+    return {
+      languages: navigator.languages,
+      country: data.countryName || null,
+      countryCode: data.countryCode || null,
+      continent: data.continent || null,
+      locality: data.locality || null,
+      city: data.city || null,
+      latitude: geo.latitude || null,
+      longitude: geo.longitude || null,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      browser: navigator.userAgent,
+      os: OS,
+      deviceType: /Mobi|Android/i.test(navigator.userAgent)
+        ? "Mobile"
+        : "Desktop",
+    };
   }
+
+  useEffect(() => {
+    async function fetchLocation() {
+      try {
+        const location = await getLocationInfo();
+        console.log("Location on mount:", location);
+        setLoc(location);
+      } catch (err) {
+        console.warn("User blocked location on mount:", err);
+      }
+    }
+
+    fetchLocation();
+  }, []);
 
   async function googleAuthSignIn() {
     setIsGoogleAuthDis(true);
     setGoogleAuthStutas("loading");
     try {
-      const loc = await getFullLocationDetails();
-      console.log(loc);
       const app = await userAuth.googleSign(loc);
       console.log(app);
       setGoogleAuthStutas(app.type === "data" ? "normal" : "error");
@@ -81,8 +101,6 @@ export default function RegisterTool() {
     setIsGihubAuthSDis(true);
     setGihubAuthStutas("loading");
     try {
-      const loc = await getFullLocationDetails();
-      console.log(loc);
       const app = await userAuth.gihubSignIn(loc);
       console.log(app);
       setGihubAuthStutas(app.type === "data" ? "normal" : "error");
@@ -97,8 +115,6 @@ export default function RegisterTool() {
     setIsXAuthDis(true);
     setXAuthStutas("loading");
     try {
-      const loc = await getFullLocationDetails();
-      console.log(loc);
       const app = await userAuth.XSignIn(loc);
       console.log(app);
       setXAuthStutas(app.type === "data" ? "normal" : "error");
