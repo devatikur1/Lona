@@ -15,6 +15,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
+      textareaRef.current.style.maxHeight = "108px";
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + "px";
     }
@@ -29,7 +30,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
   };
 
   return (
-    <section className="relative w-full bottom-0 flex justify-center items-center">
+    <section className="absolute w-full bottom-0 flex justify-center items-center">
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -60,7 +61,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Ask something..."
-            className="flex-1 bg-transparent resize-none border-none outline-none text-white placeholder:text-[#acaaaa] focus:ring-0 max-h-40 overflow-y-auto"
+            className="flex-1 bg-transparent resize-none border-none outline-none text-white placeholder:text-[#acaaaa] focus:ring-0 max-h-[108px] overflow-y-auto"
             rows={1}
           />
 
