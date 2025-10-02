@@ -3,7 +3,7 @@ import Logo from '../../others/Logo'
 
 export default function GuestMain() {
   return (
-    <main className="w-full h-full flex justify-center items-center">
+    <main className="w-full h-full flex justify-center items-center overflow-x-hidden overflow-y-auto">
       <section>
         <article className='flex items-center gap-3'>
           <div>

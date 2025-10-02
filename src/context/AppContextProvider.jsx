@@ -9,6 +9,8 @@ export default function AppContextProvider({ children }) {
   const [logged, setLogged] = useState(false);
   const [userData, setUserData] = useState(false);
 
+  const [text, setText] = useState("");
+
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function AppContextProvider({ children }) {
 
   return (
     <AppContext.Provider
-      value={{ showHeader, setShowHeader, userAuth, logged }}
+      value={{ showHeader, setShowHeader, userAuth, logged, text, setText }}
     >
       {children}
     </AppContext.Provider>
