@@ -1,12 +1,15 @@
 import { ChevronDown } from "lucide-react";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import AttachIcon from "../../others/AttachIcon";
 import { motion } from "motion/react";
 import ModelIcon from "../../others/ModelIcon";
 import Send from "../../others/Send";
+import clsx from "clsx";
 
 export default function ChatBox({ text = "", setText, onSend }) {
+  const [formHeight, setFormHeight] = useState(36);
   const textareaRef = useRef(null);
+  const fromref = useRef(null);
 
   // Auto grow textarea height
   useEffect(() => {
@@ -15,6 +18,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + "px";
     }
+      setFormHeight(fromref.current.offsetHeight);
   }, [text]);
 
   const handleSubmit = (e) => {
@@ -33,7 +37,15 @@ export default function ChatBox({ text = "", setText, onSend }) {
         style={{ borderRadius: "28px" }}
         className="bg-[#161619] w-[95%] px-1.5 py-2 border border-[#212123] mb-4"
       >
-        <form onSubmit={handleSubmit} className="flex items-end gap-2">
+        <form
+          ref={fromref}
+          onSubmit={handleSubmit}
+          className={clsx(
+            "flex gap-2",
+            formHeight <= 36 && "items-center",
+            formHeight > 36 && "items-end"
+          )}
+        >
           {/* Attach Button */}
           <button
             type="button"

@@ -26,23 +26,23 @@
 
 @layer utilities {
   /* Custom scroll */
-  .scrollCustom::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
 
-  .scrollCustom::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .scrollCustom::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background: #212123;
     border-radius: 8px;
     border: 2px solid transparent;
   }
 
-  .scrollCustom::-webkit-scrollbar-thumb:hover {
-    background: #884dff;
+  ::-webkit-scrollbar-thumb:hover {
+    background: #29292b;
   }
 
   /* Firefox support */
