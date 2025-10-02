@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import React, { useRef } from "react";
+import React from "react";
 import Logo from "../../../others/Logo";
 import ToggleBtn from "../../../others/ToggleBtn";
 import { EllipsisVertical, History, Search } from "lucide-react";
