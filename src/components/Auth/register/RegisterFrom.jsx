@@ -38,7 +38,7 @@ export default function RegisterFrom({ method }) {
       <header className="min-h-[8vh] max-h-[8vh] w-[100%] flex justify-center items-center px-4">
         <Header />
       </header>
-      <main className="h-[70vh] w-full flex items-center py-[15%] justify-center">
+      <main className="min-h-[78vh] lg:min-h-[70vh] w-full flex items-center py-[15%] justify-center">
         {method === "email" ? <RegisterMainForm /> : <RegisterTool />}
       </main>
       <footer className="h-full flex justify-center items-end">
