@@ -1,22 +1,14 @@
-import React from 'react'
-import Sidebar from '../components/Home/Sidebar';
-import Header from '../components/Home/Header';
+import React, { useContext } from "react";
+import LoggedUserHome from "../components/Home/LoggedUserHome";
+import { AppContext } from "../context/AppContext";
+import GuestUserHome from "../components/GuestHome/GuestUserHome";
 
 export default function HomePage() {
+  const { logged } = useContext(AppContext);
   return (
-    <aside className="flex">
-      <section
-        style={{
-          borderRight: "0.124rem solid #212123",
-        }}
-        className="h-screen"
-      >
-        <Sidebar />
-      </section>
-      <section className="w-full">
-        <Header />
-        j
-      </section>
-    </aside>
+    <>
+      {logged === true && <LoggedUserHome />}
+      {logged === false && <GuestUserHome />}
+    </>
   );
 }

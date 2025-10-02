@@ -52,7 +52,7 @@ export default function Header() {
                         transition-colors duration-300 ease-in-out
                         flex items-center gap-3"
             >
-              <span className="text-[1.7rem] md:text-[2rem] lg:text-[2.3rem] leading-none font-medium">
+              <span className="text-[1.7rem] md:text-[1.8rem] lg:text-[2rem] leading-none font-medium">
                 lonas
               </span>
             </div>
