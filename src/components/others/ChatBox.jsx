@@ -42,7 +42,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
           ref={fromref}
           onSubmit={handleSubmit}
           className={clsx(
-            "flex gap-2",
+            "flex gap-2 h-[180px]",
             formHeight <= 36 && "items-center",
             formHeight > 36 && "items-end"
           )}
@@ -61,7 +61,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Ask something..."
-            className="flex-1 bg-transparent resize-none border-none outline-none text-white placeholder:text-[#acaaaa] focus:ring-0 max-h-[108px] overflow-y-auto"
+            className="flex-1 bg-transparent resize-none border-none outline-none text-white placeholder:text-[#acaaaa] focus:ring-0 h-full overflow-y-auto"
             rows={1}
           />
 
