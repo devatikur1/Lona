@@ -42,7 +42,7 @@ export default function ChatBox({ text = "", setText, onSend }) {
           ref={fromref}
           onSubmit={handleSubmit}
           className={clsx(
-            "flex gap-2 h-[180px]",
+            "flex gap-2 max-h-[180px]",
             formHeight <= 36 && "items-center",
             formHeight > 36 && "items-end"
           )}
