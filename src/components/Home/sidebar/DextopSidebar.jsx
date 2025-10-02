@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import React from "react";
+import React, { useRef } from "react";
 import Logo from "../../../others/Logo";
 import ToggleBtn from "../../../others/ToggleBtn";
 import { EllipsisVertical, History, Search } from "lucide-react";
@@ -11,19 +11,22 @@ export default function DextopSidebar({
   setShowHeader,
   baseSidebarClasses,
   groupedItems,
-}) {
+}){
+
+
   return (
     <>
       <motion.main
-        initial={{ width: showHeader ? 300 : 75 }}
-        animate={{ width: showHeader ? 300 : 75 }}
+        initial={{ width: showHeader ? 300 : 50 }}
+        animate={{ width: showHeader ? 300 : 60 }}
         transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
-        className={clsx(baseSidebarClasses)}
+        className={clsx(baseSidebarClasses, "*:select-none")}
+        onClick={() => setShowHeader((prev) => !prev)}
       >
         {/* when expanded show full view, when collapsed show compact view */}
         {showHeader ? (
           <section className="flex flex-col justify-between h-screen">
-            <section>
+            <section onClick={(e) => e.stopPropagation()}>
               <div className="px-3 py-3">
                 {/* Logo + toggle */}
                 <article className="flex justify-between items-center px-2 pb-3 pt-3 mb-3">
@@ -141,11 +144,11 @@ export default function DextopSidebar({
         ) : (
           // Collapsed (icon-only) view
           <section className="flex flex-col justify-between h-screen">
-            <section>
-              <div className="px-3 py-3 flex flex-col gap-2">
-                <article className="logoAndIconPrenet flex justify-center items-center p-2 mb-3">
-                  <div className="dexLogo">
-                    <Logo size={20} />
+            <section onClick={(e) => e.stopPropagation()}>
+              <div className="px-1 py-3 flex flex-col gap-2">
+                <article className="flex justify-center items-center p-2 mb-3">
+                  <div>
+                    <Logo size={30} />
                   </div>
                 </article>
 
@@ -157,7 +160,7 @@ export default function DextopSidebar({
                   className="bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-center p-2 mb-2"
                 >
                   <div className="w-full flex items-center justify-center">
-                    <Search size={22} />
+                    <Search size={20} />
                   </div>
                 </div>
 
@@ -169,14 +172,14 @@ export default function DextopSidebar({
 
                 <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-center p-2 rounded-lg">
                   <div className="flex items-center justify-center">
-                    <History size={22} />
+                    <History size={20} />
                   </div>
                 </div>
               </div>
             </section>
 
             {/* bottom compact profile */}
-            <section>
+            <section onClick={(e) => e.stopPropagation()}>
               <div className="w-full flex flex-col items-center justify-center gap-5 px-3 py-3 bg-transparent border-t border-[#212123]">
                 <div className="flex items-center gap-2 overflow-hidden">
                   <img

@@ -33,9 +33,9 @@ export default function Header() {
   return (
     <header
       style={{ filter: "drop-shadow(0 2px 2px #080808)" }}
-      className="w-full relative select-none h-[70px] bg-[#080808]"
+      className="w-full select-none h-[70px] bg-[#080808]"
     >
-      <nav className="w-full flex justify-between items-center px-2 py-2 cursor-pointer h-full">
+      <nav className="relative w-full flex justify-between items-center px-2 py-2 cursor-pointer h-full">
         {/* Website name */}
         <section className="flex items-center px-3 gap-1.5">
           <div
@@ -48,7 +48,7 @@ export default function Header() {
             <div
               className="px-4 py-1.5 rounded-xl 
                         bg-transparent border border-transparent 
-                        hover:bg-[#0d0d0d] hover:border-[#252525] 
+                        hover:bg-[#0d0d0d]
                         transition-colors duration-300 ease-in-out
                         flex items-center gap-3"
             >

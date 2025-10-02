@@ -25,11 +25,12 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -350, opacity: 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="fixed z-50 top-0 left-0 h-[90vh] w-[80vw] max-w-[335px] flex flex-col border-r border-b border-[#212123] bg-[#080808]"
+        className="fixed z-50 top-0 left-0 h-[90vh] w-[80vw] max-w-[335px] flex flex-col border-r border-b border-[#212123] bg-[#080808] *:select-none"
+        onClick={() => setShowHeader((prev) => !prev)}
       >
         <main className="flex flex-col justify-between h-full">
           {/* -------------------top part------------------- */}
-          <section>
+          <section onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="px-3 py-3">
               <article className="flex justify-between items-center px-2 pb-3 pt-3 mb-3">
@@ -132,7 +133,7 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
           </section>
 
           {/* --------------bottom part-------------- */}
-          <section>
+          <section onClick={(e) => e.stopPropagation()}>
             {/* Profile */}
             <div className="w-full flex items-center justify-between px-3 py-3 bg-transparent border-t border-[#212123]">
               <div className="flex items-center gap-2 overflow-hidden">
