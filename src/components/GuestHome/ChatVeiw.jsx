@@ -8,7 +8,7 @@ export default function ChatView({ chatBoxHeieht, msgs }) {
       style={{ marginBottom: `${chatBoxHeieht}px` }}
       className="pt-5 flex w-full justify-center items-center overflow-x-hidden touch-pan-y overflow-y-auto max-w-[100vw]"
     >
-      <section className="w-full px-8 h-auto flex flex-col gap-10 max-w-[60vw]">
+      <section className="w-full px-8 h-auto flex flex-col gap-10 max-w-[99vw] md:max-w-[60vw]">
         {msgs.map((msg, index) => {
           if (msg.type === "user") {
             return <UserMsg key={index} msg={msg.prompt} />;
