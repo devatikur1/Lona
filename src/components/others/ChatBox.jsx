@@ -6,10 +6,12 @@ import ModelIcon from "../../others/ModelIcon";
 import Send from "../../others/Send";
 import clsx from "clsx";
 import Footer from "./Footer";
+import GenLoading from "../../others/GenLoading";
 
 export default function ChatBox({
   text = "",
   setText,
+  lodingMsg,
   onSend,
   setChatBoxHeieht,
 }) {
@@ -94,10 +96,11 @@ export default function ChatBox({
           {/* Send Button */}
           <button
             type="submit"
-            disabled={!text.trim()}
+            disabled={!text.trim() || lodingMsg}
             className="bg-white hover:bg-gray-200 transition-colors duration-200 rounded-full p-2 flex items-center gap-2 disabled:opacity-65 disabled:pointer-events-none"
           >
-            <Send color={"#161619"} size={20} />
+            {!lodingMsg && <Send color={"#161619"} size={20} />}
+            {lodingMsg && <GenLoading color={"#161619"} size={20} />}
           </button>
         </form>
       </motion.div>
