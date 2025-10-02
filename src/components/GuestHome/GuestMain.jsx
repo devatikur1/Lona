@@ -1,11 +1,14 @@
 import React from 'react'
 import Logo from '../../others/Logo'
 
-export default function GuestMain() {
+export default function GuestMain({ chatBoxHeieht }) {
   return (
-    <main className="w-full h-full flex justify-center items-center overflow-x-hidden overflow-y-auto">
+    <main
+      style={{ marginBottom: `${chatBoxHeieht}px` }}
+      className="w-full h-full flex justify-center items-center overflow-x-hidden overflow-y-auto"
+    >
       <section>
-        <article className='flex items-center gap-3'>
+        <article className="flex items-center gap-3">
           <div>
             <Logo size={50} />
           </div>

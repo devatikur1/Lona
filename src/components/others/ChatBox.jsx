@@ -6,10 +6,11 @@ import ModelIcon from "../../others/ModelIcon";
 import Send from "../../others/Send";
 import clsx from "clsx";
 
-export default function ChatBox({ text = "", setText, onSend }) {
+export default function ChatBox({ text = "", setText, onSend, setChatBoxHeieht }) {
   const [formHeight, setFormHeight] = useState(36);
   const textareaRef = useRef(null);
   const fromref = useRef(null);
+  const chatBoxRef = useRef(null);
 
   // Auto grow textarea height
   useEffect(() => {
@@ -19,7 +20,10 @@ export default function ChatBox({ text = "", setText, onSend }) {
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + "px";
     }
-      setFormHeight(fromref.current.offsetHeight);
+    setFormHeight(fromref.current.offsetHeight);
+    console.log(chatBoxRef.current.offsetHeight);
+    setChatBoxHeieht(chatBoxRef.current.offsetHeight);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
   const handleSubmit = (e) => {
@@ -30,7 +34,10 @@ export default function ChatBox({ text = "", setText, onSend }) {
   };
 
   return (
-    <section className="absolute w-full bottom-0 flex justify-center items-center">
+    <section
+      ref={chatBoxRef}
+      className="fixed w-full bottom-0 flex justify-center items-center"
+    >
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
