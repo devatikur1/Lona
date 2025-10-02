@@ -11,12 +11,12 @@ export default function LogIn() {
   const method = searchParams.get("method");
   let navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (logged) {
-  //     navigate("/account")
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [logged]);
+  useEffect(() => {
+    if (logged) {
+      navigate("/account")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logged]);
   
 
   return (

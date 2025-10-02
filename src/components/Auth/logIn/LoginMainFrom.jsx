@@ -116,7 +116,6 @@ export default function LoginMainFrom() {
 
     if (type === "data") {
       setformStatus("sended");
-      console.log("Login success!");
       setEmailValid(true);
       setPassValid(true);
     } else if (type === "error") {

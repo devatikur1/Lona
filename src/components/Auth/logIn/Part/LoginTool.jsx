@@ -71,7 +71,6 @@ export default function LoginTool() {  // some
     async function fetchLocation() {
       try {
         const location = await getLocationInfo();
-        console.log("Location on mount:", location);
         setLoc(location);
       } catch (err) {
         console.warn("User blocked location on mount:", err);
@@ -86,7 +85,6 @@ export default function LoginTool() {  // some
     setGoogleAuthStutas("loading");
     try {
       const app = await userAuth.googleSign(loc);
-      console.log(app);
       setGoogleAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setGoogleAuthStutas("error");
@@ -100,7 +98,6 @@ export default function LoginTool() {  // some
     setGihubAuthStutas("loading");
     try {
       const app = await userAuth.gihubSignIn(loc);
-      console.log(app);
       setGihubAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setGihubAuthStutas("error");
@@ -114,7 +111,6 @@ export default function LoginTool() {  // some
     setXAuthStutas("loading");
     try {
       const app = await userAuth.XSignIn(loc);
-      console.log(app);
       setXAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setXAuthStutas("error");

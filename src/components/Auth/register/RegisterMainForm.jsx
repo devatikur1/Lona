@@ -27,7 +27,7 @@ import { AppContext } from "../../../context/AppContext";
 
 export default function RegisterMainForm() {
   // form
-  const [fromStatus, setFromStatus] = useState("normal");
+  const [fromStatus, setFromStatus] = useState("sended");
 
   // email state
   const [email, setEmail] = useState("");
@@ -189,12 +189,12 @@ export default function RegisterMainForm() {
     e.preventDefault();
     let valid = checkName();
     if (!valid) return;
-    console.log(email, firstName, lastName, pass);
+    setFromStatus("sending");
     let fullName = `${firstName} + " " + ${lastName}`;
     try {
       let location = await getLocationInfo();
       let app = await userAuth.signUp(email, pass, fullName, location);
-      setFromStatus(app.type === "data" ? "normal" : "error");
+      setFromStatus(app.type === "data" ? "sended" : "error");
     } catch (error) {
       setFromStatus("error");
     }

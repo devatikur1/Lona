@@ -87,7 +87,6 @@ export default function RegisterTool() {
     setGoogleAuthStutas("loading");
     try {
       const app = await userAuth.googleSign(loc);
-      console.log(app);
       setGoogleAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setGoogleAuthStutas("error");
@@ -101,7 +100,6 @@ export default function RegisterTool() {
     setGihubAuthStutas("loading");
     try {
       const app = await userAuth.gihubSignIn(loc);
-      console.log(app);
       setGihubAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setGihubAuthStutas("error");
@@ -115,7 +113,6 @@ export default function RegisterTool() {
     setXAuthStutas("loading");
     try {
       const app = await userAuth.XSignIn(loc);
-      console.log(app);
       setXAuthStutas(app.type === "data" ? "normal" : "error");
     } catch (err) {
       setXAuthStutas("error");

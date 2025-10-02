@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import React from "react";
 
 export default function RegisterBtn({ fromStatus }) {
@@ -8,7 +9,17 @@ export default function RegisterBtn({ fromStatus }) {
       type="submit"
     >
       <div className="flex items-center gap-3 py-1.5 md:py-[0.5rem]">
-        <span className="text-[#080808]">Register</span>
+        {fromStatus === "sending" && (
+          <span className="text-[#080808] animate-spin">
+            <Loader2 size={23} color={"#080808"} />
+          </span>
+        )}
+        {fromStatus === "sended" && (
+          <span className="text-[#080808]">Register</span>
+        )}
+        {fromStatus === "error" && (
+          <span className="text-[#080808]">Register</span>
+        )}
       </div>
     </button>
   );

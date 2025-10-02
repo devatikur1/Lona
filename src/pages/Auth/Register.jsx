@@ -1,11 +1,22 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ImagePart from "../../components/Auth/ImagePart";
 import RegisterFrom from "../../components/Auth/register/RegisterFrom";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../../context/AppContext";
 
 export default function Register() {
+    const { logged } = useContext(AppContext);
   const [searchParams] = useSearchParams();
 
   const method = searchParams.get("method");
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (logged) {
+      navigate("/account");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logged]);
   return (
     <aside className="flex w-screen min-h-screen overflow-x-hidden overscroll-y-auto scrollCustom scrollVeiwNone *:select-none">
       {/* Left part (form) */}
