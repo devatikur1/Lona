@@ -1,11 +1,11 @@
 import { Copy } from "lucide-react";
 import React from "react";
 
-export default function UserMsg({ msg }) {
+export default function UserMsg({ key, msg }) {
   return (
-    <article className="w-full flex flex-col justify-center items-end">
+    <article key={key} className="max-w-[100%] flex flex-col justify-center items-end">
       <div className="flex flex-col justify-end items-end gap-2">
-        <div className="w-auto bg-[#161619] border-[#212123] px-4 py-2 rounded-[15px] rounded-ee-[0px] ">
+        <div className="max-w-[50%] w-auto bg-[#161619] border-[#212123] px-4 py-2 rounded-[15px] rounded-ee-[0px] ">
           <span>{msg}</span>
         </div>
         <span
