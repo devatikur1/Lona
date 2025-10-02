@@ -13,7 +13,7 @@ const AI = {
       });
 
       const response = await chat.sendMessage({ message: prompt });
-      return { type: "data", role: "model", content: response };
+      return { type: "data", role: "model", content: response.text };
     } catch (error) {
       console.error("Gemini Error:", error);
       return { type: "data", role: "model", content: "⚠️ Something went wrong." };

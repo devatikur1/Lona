@@ -31,12 +31,12 @@ export default function GuestUserHome() {
         parts: [{ text: m.prompt }],
       }))
     );
-    console.log(aiResponse);
+    console.log(aiResponse.content);
     
 
     const aiChat = {
       type: "ai",
-      prompt: aiResponse.text,
+      prompt: aiResponse.content,
       atSendTime: new Date(),
     };
     setmsgs((prev) => [...prev, aiChat]);
