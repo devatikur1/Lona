@@ -12,6 +12,11 @@ export default function AppContextProvider({ children }) {
   const [text, setText] = useState("");
 
   const auth = getAuth(app);
+  useEffect(() => {
+    console.log(logged);
+    
+  }, [logged])
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
