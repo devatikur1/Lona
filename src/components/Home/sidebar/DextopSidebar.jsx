@@ -151,7 +151,6 @@ export default function DextopSidebar({
               </div>
               <div
                 className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center"
-                onClick={() => setShowHeader((prev) => !prev)}
               >
                 <ToggleBtn />
               </div>
@@ -219,7 +218,6 @@ export default function DextopSidebar({
                 </div>
                 <div
                   className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center"
-                  onClick={() => setShowHeader((prev) => !prev)}
                 >
                   <ToggleBtn />
                 </div>
