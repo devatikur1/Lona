@@ -7,11 +7,12 @@ import {
   GithubAuthProvider,
   TwitterAuthProvider,
   createUserWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
-
 import { app } from "../Firebase";
 import { addImageInStorage } from "../../../hooks/useAddImageInStorage";
+
 const auth = getAuth(app);
 const fireStore = getFirestore(app);
 
@@ -19,8 +20,41 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const twitterProvider = new TwitterAuthProvider();
 
+// 🔹 Helper function → provider user data save করা
+const saveUserData = async (user, provider, location, photoURL) => {
+  let uploadedUrl = null;
+
+  if (photoURL) {
+    try {
+      const response = await fetch(photoURL);
+      const blob = await response.blob();
+      const file = new File([blob], "profile.jpg", { type: blob.type });
+      uploadedUrl = await addImageInStorage(file);
+    } catch (err) {
+      console.error("Image upload failed:", err);
+    }
+  }
+
+  const userRef = doc(fireStore, "users", user.uid);
+  await setDoc(
+    userRef,
+    {
+      id: user.uid,
+      name: user.displayName || user.email,
+      email: user.email,
+      profileImgUrl: uploadedUrl,
+      atSignIn: serverTimestamp(),
+      atLastLogin: serverTimestamp(),
+      provider,
+      location,
+    },
+    { merge: true }
+  );
+  localStorage.setItem("logged", true);
+};
+
 const userAuth = {
-  // Log in function
+  // 🔹 Email Login
   logIn: async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -29,6 +63,7 @@ const userAuth = {
         password
       );
       const user = userCredential.user;
+
       const userRef = doc(fireStore, "users", user.uid);
       await setDoc(
         userRef,
@@ -36,6 +71,7 @@ const userAuth = {
         { merge: true }
       );
       localStorage.setItem("logged", true);
+
       return { type: "data", user };
     } catch (error) {
       console.error("Login Error:", error);
@@ -46,6 +82,8 @@ const userAuth = {
       };
     }
   },
+
+  // 🔹 Email Sign Up
   signUp: async (email, password, fullName, location) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -54,19 +92,22 @@ const userAuth = {
         password
       );
       const user = userCredential.user;
+
       const userRef = doc(fireStore, "users", user.uid);
       await setDoc(userRef, {
         id: user.uid,
         name: fullName,
-        email: email,
+        email,
         profileImgUrl: null,
         atSignIn: serverTimestamp(),
         atLastLogin: serverTimestamp(),
-        Probider: "email",
+        provider: "email",
         location,
       });
+
       return { type: "data", user };
     } catch (error) {
+      console.error("SignUp Error:", error);
       return {
         type: "error",
         errorCode: error.code,
@@ -75,35 +116,14 @@ const userAuth = {
     }
   },
 
+  // 🔹 Google Login
   googleSign: async (location) => {
     try {
-      const googleRes = await signInWithPopup(auth, googleProvider);
-      const user = googleRes.user;
-
-      const response = await fetch(user.photoURL);
-      const blob = await response.blob();
-      const file = new File([blob], "profile.jpg", { type: blob.type });
-      const uploadedUrl = await addImageInStorage(file);
-
-      const userRef = doc(fireStore, "users", user.uid);
-      await setDoc(
-        userRef,
-        {
-          id: user.uid,
-          name: user.displayName,
-          email: user.email,
-          profileImgUrl: uploadedUrl,
-          atSignIn: serverTimestamp(),
-          atLastLogin: serverTimestamp(),
-          Probider: "google",
-          location,
-        },
-        { merge: true }
-      );
-      localStorage.setItem("logged", true);
-      return { type: "data", user };
+      const res = await signInWithPopup(auth, googleProvider);
+      await saveUserData(res.user, "google", location, res.user.photoURL);
+      return { type: "data", user: res.user };
     } catch (error) {
-      console.error(error);
+      console.error("Google Login Error:", error);
       return {
         type: "error",
         errorCode: error.code,
@@ -112,33 +132,12 @@ const userAuth = {
     }
   },
 
-  gihubSignIn: async (location) => {
+  // 🔹 GitHub Login
+  githubSign: async (location) => {
     try {
-      const githubRes = await signInWithPopup(auth, githubProvider);
-      const user = githubRes.user;
-
-      const response = await fetch(user.photoURL);
-      const blob = await response.blob();
-      const file = new File([blob], "profile.jpg", { type: blob.type });
-      const uploadedUrl = await addImageInStorage(file);
-
-      const userRef = doc(fireStore, "users", user.uid);
-      await setDoc(
-        userRef,
-        {
-          id: user.uid,
-          name: user.displayName,
-          email: user.email,
-          profileImgUrl: uploadedUrl,
-          atSignIn: serverTimestamp(),
-          atLastLogin: serverTimestamp(),
-          Probider: "github",
-          location,
-        },
-        { merge: true }
-      );
-      localStorage.setItem("logged", true);
-      return { type: "data", user };
+      const res = await signInWithPopup(auth, githubProvider);
+      await saveUserData(res.user, "github", location, res.user.photoURL);
+      return { type: "data", user: res.user };
     } catch (error) {
       console.error("GitHub Login Error:", error);
       return {
@@ -149,33 +148,12 @@ const userAuth = {
     }
   },
 
-  XSignIn: async (location) => {
+  // 🔹 Twitter / X Login
+  twitterSign: async (location) => {
     try {
-      const result = await signInWithPopup(auth, twitterProvider);
-      const user = result.user;
-
-      const response = await fetch(user.photoURL);
-      const blob = await response.blob();
-      const file = new File([blob], "profile.jpg", { type: blob.type });
-      const uploadedUrl = await addImageInStorage(file);
-
-      const userRef = doc(fireStore, "users", user.uid);
-      await setDoc(
-        userRef,
-        {
-          id: user.uid,
-          name: user.displayName,
-          email: user.email,
-          profileImgUrl: uploadedUrl,
-          atSignIn: serverTimestamp(),
-          atLastLogin: serverTimestamp(),
-          Probider: "x",
-          location,
-        },
-        { merge: true }
-      );
-      localStorage.setItem("logged", true);
-      return { type: "data", user };
+      const res = await signInWithPopup(auth, twitterProvider);
+      await saveUserData(res.user, "x", location, res.user.photoURL);
+      return { type: "data", user: res.user };
     } catch (error) {
       console.error("Twitter Login Error:", error);
       return {
@@ -186,21 +164,32 @@ const userAuth = {
     }
   },
 
-  // Detect user (auth state observer)
-  detectedUser: () => {
-    onAuthStateChanged(auth, (user) => {
+  // 🔹 Detect user
+  detectedUser: (callback) => {
+    return onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user.uid);
-
-        return { type: "data", id: user };
+        callback({ type: "data", user });
       } else {
-        return { type: "error" };
+        callback({ type: "error" });
       }
     });
   },
 
-  // logout
-  logOut: () => {},
+  // 🔹 Logout
+  logOut: async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem("logged");
+      return { type: "data" };
+    } catch (error) {
+      console.error("Logout Error:", error);
+      return {
+        type: "error",
+        errorCode: error.code,
+        errorMessage: error.message,
+      };
+    }
+  },
 };
 
 export default userAuth;

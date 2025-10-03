@@ -4,8 +4,9 @@ import NewChat from "../../../others/NewChat";
 import ToggleBtn from "../../../others/ToggleBtn";
 import Logo from "../../../others/Logo";
 import { motion } from "motion/react";
+import emptyProfile from "../../../assets/blank_profile_picture.svg";
 
-export default function MobileSideBar({ setShowHeader, groupedItems }) {
+export default function MobileSideBar({ setShowHeader, groupedItems, userData }) {
   return (
     <>
       {/* Overlay */}
@@ -150,11 +151,14 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2 overflow-hidden"
               >
-                <img
-                  className="w-[30px] h-[30px] rounded-full object-cover"
-                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                  alt="profile"
-                />
+                {userData && (
+                  <img
+                    loading="lazy"
+                    className="w-[30px] h-[30px] rounded-full object-cover"
+                    src={userData.profileImgUrl || emptyProfile}
+                    alt="profile"
+                  />
+                )}
                 <span className="text-sm md:text-base truncate font-medium">
                   Atikur Rahman
                 </span>

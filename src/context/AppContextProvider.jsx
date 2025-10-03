@@ -25,8 +25,6 @@ export default function AppContextProvider({ children }) {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setUserData(docSnap.data());
-          console.log(docSnap.data());
-          
         } else {
           setUserData(null);
         }
@@ -37,8 +35,10 @@ export default function AppContextProvider({ children }) {
     });
 
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userDataUpdate]);
 
+  
   return (
     <AppContext.Provider
       value={{
