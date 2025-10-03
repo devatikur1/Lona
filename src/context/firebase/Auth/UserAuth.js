@@ -11,7 +11,7 @@ import {
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { app } from "../Firebase";
-import { addImageInStorage } from "../../../hooks/useAddImageInStorage";
+import { saveUserData } from "../../../hooks/useSaveUserData";
 
 const auth = getAuth(app);
 const fireStore = getFirestore(app);
@@ -19,40 +19,6 @@ const fireStore = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const twitterProvider = new TwitterAuthProvider();
-
-// 🔹 Helper function → provider user data save করা
-const saveUserData = async (user, provider, location, photoURL) => {
-  let uploadedUrl = null;
-
-  if (photoURL) {
-    try {
-      const response = await fetch(photoURL);
-      const blob = await response.blob();
-      const file = new File([blob], "profile.jpg", { type: blob.type });
-      uploadedUrl = await addImageInStorage(file);
-    } catch (err) {
-      console.error("Image upload failed:", err);
-    }
-  }
-
-  const userRef = doc(fireStore, "users", user.uid);
-  await setDoc(
-    userRef,
-    {
-      id: user.uid,
-      name: user.displayName || user.email,
-      email: user.email,
-      profileImgUrl: uploadedUrl,
-      atSignIn: serverTimestamp(),
-      atLastLogin: serverTimestamp(),
-      provider,
-      location,
-      isDisable: false,
-    },
-    { merge: true }
-  );
-  localStorage.setItem("logged", true);
-};
 
 const userAuth = {
   // 🔹 Email Login
@@ -121,7 +87,13 @@ const userAuth = {
   googleSign: async (location) => {
     try {
       const res = await signInWithPopup(auth, googleProvider);
-      await saveUserData(res.user, "google", location, res.user.photoURL);
+      await saveUserData(
+        fireStore,
+        res.user,
+        "google",
+        location,
+        res.user.photoURL
+      );
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("Google Login Error:", error);
@@ -137,7 +109,13 @@ const userAuth = {
   githubSign: async (location) => {
     try {
       const res = await signInWithPopup(auth, githubProvider);
-      await saveUserData(res.user, "github", location, res.user.photoURL);
+      await saveUserData(
+        fireStore,
+        res.user,
+        "google",
+        location,
+        res.user.photoURL
+      );
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("GitHub Login Error:", error);
@@ -153,7 +131,13 @@ const userAuth = {
   twitterSign: async (location) => {
     try {
       const res = await signInWithPopup(auth, twitterProvider);
-      await saveUserData(res.user, "x", location, res.user.photoURL);
+      await saveUserData(
+        fireStore,
+        res.user,
+        "google",
+        location,
+        res.user.photoURL
+      );
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("Twitter Login Error:", error);
