@@ -44,9 +44,10 @@ export default function AppContextProvider({ children }) {
       value={{
         showHeader,
         setShowHeader,
-        setUserDataUpdate,
         userData,
+        setUserDataUpdate,
         logged,
+        userAuth,
         text,
         setText,
       }}
