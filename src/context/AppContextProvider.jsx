@@ -3,38 +3,53 @@ import { AppContext } from "./AppContext";
 import userAuth from "./firebase/Auth/UserAuth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "./firebase/Firebase";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 export default function AppContextProvider({ children }) {
   const [showHeader, setShowHeader] = useState(false);
   const [logged, setLogged] = useState(null);
-  const [userData, setUserData] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [userDataUpdate, setUserDataUpdate] = useState(0);
 
   const [text, setText] = useState("");
 
+  // firebase
   const auth = getAuth(app);
-  useEffect(() => {
-    console.log(logged);
-    
-  }, [logged])
-  
+  const fireStore = getFirestore(app);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log(user);
         setLogged(true);
+        const docRef = doc(fireStore, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+          console.log(docSnap.data());
+          
+        } else {
+          setUserData(null);
+        }
       } else {
         setLogged(false);
+        setUserData(null);
       }
     });
 
-    // cleanup
     return () => unsubscribe();
-  }, []);
+  }, [userDataUpdate]);
 
   return (
     <AppContext.Provider
-      value={{ showHeader, setShowHeader, userAuth, logged, text, setText }}
+      value={{
+        showHeader,
+        setShowHeader,
+        setUserDataUpdate,
+        userData,
+        logged,
+        text,
+        setText,
+      }}
     >
       {children}
     </AppContext.Provider>

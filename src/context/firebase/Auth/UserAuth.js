@@ -11,6 +11,7 @@ import {
 import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 import { app } from "../Firebase";
+import { addImageInStorage } from "../../../hooks/useAddImageInStorage";
 const auth = getAuth(app);
 const fireStore = getFirestore(app);
 
@@ -79,6 +80,11 @@ const userAuth = {
       const googleRes = await signInWithPopup(auth, googleProvider);
       const user = googleRes.user;
 
+      const response = await fetch(user.photoURL);
+      const blob = await response.blob();
+      const file = new File([blob], "profile.jpg", { type: blob.type });
+      const uploadedUrl = await addImageInStorage(file);
+
       const userRef = doc(fireStore, "users", user.uid);
       await setDoc(
         userRef,
@@ -86,7 +92,7 @@ const userAuth = {
           id: user.uid,
           name: user.displayName,
           email: user.email,
-          profileImgUrl: user.photoURL,
+          profileImgUrl: uploadedUrl,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           Probider: "google",
@@ -110,6 +116,12 @@ const userAuth = {
     try {
       const githubRes = await signInWithPopup(auth, githubProvider);
       const user = githubRes.user;
+
+      const response = await fetch(user.photoURL);
+      const blob = await response.blob();
+      const file = new File([blob], "profile.jpg", { type: blob.type });
+      const uploadedUrl = await addImageInStorage(file);
+
       const userRef = doc(fireStore, "users", user.uid);
       await setDoc(
         userRef,
@@ -117,7 +129,7 @@ const userAuth = {
           id: user.uid,
           name: user.displayName,
           email: user.email,
-          profileImgUrl: user.photoURL,
+          profileImgUrl: uploadedUrl,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           Probider: "github",
@@ -141,6 +153,12 @@ const userAuth = {
     try {
       const result = await signInWithPopup(auth, twitterProvider);
       const user = result.user;
+
+      const response = await fetch(user.photoURL);
+      const blob = await response.blob();
+      const file = new File([blob], "profile.jpg", { type: blob.type });
+      const uploadedUrl = await addImageInStorage(file);
+
       const userRef = doc(fireStore, "users", user.uid);
       await setDoc(
         userRef,
@@ -148,7 +166,7 @@ const userAuth = {
           id: user.uid,
           name: user.displayName,
           email: user.email,
-          profileImgUrl: user.photoURL,
+          profileImgUrl: uploadedUrl,
           atSignIn: serverTimestamp(),
           atLastLogin: serverTimestamp(),
           Probider: "x",

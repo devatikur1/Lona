@@ -5,15 +5,15 @@ import ToggleBtn from "../../../others/ToggleBtn";
 import { EllipsisVertical, History, Search } from "lucide-react";
 import NewChat from "../../../others/NewChat";
 import clsx from "clsx";
+import emptyProfile from "../../../assets/blank_profile_picture.svg";
 
 export default function DextopSidebar({
   showHeader,
   setShowHeader,
   baseSidebarClasses,
   groupedItems,
-}){
-
-
+  userData,
+}) {
   return (
     <>
       <motion.main
@@ -143,15 +143,23 @@ export default function DextopSidebar({
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-2 overflow-hidden"
               >
-                <img
-                  className="w-[30px] h-[30px] rounded-full object-cover"
-                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                  alt="profile"
-                />
+                {userData.profileImgUrl === null ? (
+                  <img
+                    loading="lazy"
+                    className="w-[30px] h-[30px] rounded-full object-cover"
+                    src={emptyProfile}
+                    alt="profile"
+                  />
+                ) : (
+                  <img
+                    loading="lazy"
+                    className="w-[30px] h-[30px] rounded-full object-cover"
+                    src={userData.profileImgUrl}
+                    alt="profile"
+                  />
+                )}
               </div>
-              <div
-                className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center"
-              >
+              <div className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center">
                 <ToggleBtn />
               </div>
             </div>
@@ -210,15 +218,23 @@ export default function DextopSidebar({
                   onClick={(e) => e.stopPropagation()}
                   className="flex items-center gap-2 overflow-hidden"
                 >
-                  <img
-                    className="w-[30px] h-[30px] rounded-full object-cover"
-                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                    alt="profile"
-                  />
+                  {userData.profileImgUrl === null ? (
+                    <img
+                      loading="lazy"
+                      className="w-[30px] h-[30px] rounded-full object-cover"
+                      src={emptyProfile}
+                      alt="profile"
+                    />
+                  ) : (
+                    <img
+                      loading="lazy"
+                      className="w-[30px] h-[30px] rounded-full object-cover"
+                      src={userData.profileImgUrl}
+                      alt="profile"
+                    />
+                  )}
                 </div>
-                <div
-                  className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center"
-                >
+                <div className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center">
                   <ToggleBtn />
                 </div>
               </div>

@@ -5,7 +5,7 @@ import MobileSideBar from "./sidebar/MobileSideBar";
 import DextopSidebar from "./sidebar/DextopSidebar";
 
 export default function Sidebar() {
-  const { showHeader, setShowHeader } = useContext(AppContext);
+  const { showHeader, setShowHeader, userData, setUserDataUpdate } = useContext(AppContext);
 
   //  window width
   const getInitialWidth = () =>
@@ -48,6 +48,7 @@ export default function Sidebar() {
           <MobileSideBar
             groupedItems={groupedItems}
             setShowHeader={setShowHeader}
+            userData={userData}
           />
         )}
       </AnimatePresence>
@@ -61,6 +62,7 @@ export default function Sidebar() {
             setShowHeader={setShowHeader}
             baseSidebarClasses={baseSidebarClasses}
             groupedItems={groupedItems}
+            userData={userData}
           />
         )}
       </AnimatePresence>
