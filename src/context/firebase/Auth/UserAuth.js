@@ -47,6 +47,7 @@ const saveUserData = async (user, provider, location, photoURL) => {
       atLastLogin: serverTimestamp(),
       provider,
       location,
+      isDisable: false,
     },
     { merge: true }
   );

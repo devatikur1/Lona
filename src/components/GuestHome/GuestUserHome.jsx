@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import GuestHeader from "./GuestHeader";
 import GuestMain from "./GuestMain";
-import ChatBox from "../others/ChatBox";
+import ChatBox from "./ChatBox";
 import { AppContext } from "../../context/AppContext";
 import ChatVeiw from "./ChatVeiw";
 import AI from "../../context/AI";
