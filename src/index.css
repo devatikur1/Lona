@@ -151,3 +151,9 @@ body {
 .forgetBtn::after {
   transform-origin: left center;
 }
+
+.aiChat > hr {
+  background: #303030;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

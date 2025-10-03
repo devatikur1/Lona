@@ -8,6 +8,7 @@ const AI = {
   geminiText: async (prompt, msgs = []) => {
     try {
       const chat = ai.chats.create({
+        name: "Lonas",
         model: "gemini-2.5-flash",
         history: [...msgs],
       });
@@ -16,7 +17,11 @@ const AI = {
       return { type: "data", role: "model", content: response.text };
     } catch (error) {
       console.error("Gemini Error:", error);
-      return { type: "data", role: "model", content: "⚠️ Something went wrong." };
+      return {
+        type: "data",
+        role: "model",
+        content: "⚠️ Something went wrong.",
+      };
     }
   },
 };

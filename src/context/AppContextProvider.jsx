@@ -31,6 +31,9 @@ export default function AppContextProvider({ children }) {
       } else {
         setLogged(false);
         setUserData(null);
+        if (localStorage.getItem("chat-count") === null) {
+          localStorage.setItem("chat-count", 0);
+        }
       }
     });
 
@@ -38,7 +41,6 @@ export default function AppContextProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userDataUpdate]);
 
-  
   return (
     <AppContext.Provider
       value={{

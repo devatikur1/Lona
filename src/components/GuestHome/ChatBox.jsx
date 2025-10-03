@@ -9,12 +9,12 @@ import Footer from "./Footer";
 import GenLoading from "../../others/GenLoading";
 
 export default function ChatBox({
-  text = "",
+  type,
+  text,
   setText,
   lodingMsg,
   onSend,
   setChatBoxHeieht,
-  type,
 }) {
   const [formHeight, setFormHeight] = useState(36);
   const textareaRef = useRef(null);
@@ -25,7 +25,7 @@ export default function ChatBox({
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.maxHeight = "180px";
+      textareaRef.current.style.maxHeight = "220px";
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + "px";
     }
@@ -37,14 +37,14 @@ export default function ChatBox({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    onSend?.(text); // parent থেকে send function call হবে
-    setText(""); // clear input
+    onSend?.(text);
+    setText("");
   };
 
   return (
     <section
       ref={chatBoxRef}
-      className="fixed w-full bottom-0 flex flex-col justify-center items-center"
+      className="bg-[#080808] fixed w-full bottom-0 flex flex-col justify-center items-center"
     >
       <motion.div
         initial={{ y: 100, opacity: 0 }}
@@ -57,7 +57,7 @@ export default function ChatBox({
           ref={fromref}
           onSubmit={handleSubmit}
           className={clsx(
-            "flex gap-2 max-h-[180px]",
+            "flex gap-2 max-h-[220px]",
             formHeight <= 36 && "items-center",
             formHeight > 36 && "items-end"
           )}
@@ -99,7 +99,11 @@ export default function ChatBox({
           {/* Send Button */}
           <button
             type="submit"
-            disabled={!text.trim() || lodingMsg}
+            disabled={
+              !text.trim() ||
+              lodingMsg ||
+              parseInt(localStorage.getItem("chat-count") || "0") === 4
+            }
             className="bg-white hover:bg-gray-200 transition-colors duration-200 rounded-full p-2 flex items-center gap-2 disabled:opacity-65 disabled:pointer-events-none"
           >
             {!lodingMsg && <Send color={"#161619"} size={20} />}
