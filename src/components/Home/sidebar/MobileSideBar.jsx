@@ -30,9 +30,9 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
       >
         <main className="flex flex-col justify-between h-full">
           {/* -------------------top part------------------- */}
-          <section onClick={(e) => e.stopPropagation()}>
+          <section>
             {/* Header */}
-            <div className="px-3 py-3">
+            <div onClick={(e) => e.stopPropagation()} className="px-3 py-3">
               <article className="flex justify-between items-center px-2 pb-3 pt-3 mb-3">
                 <Logo size={30} />
                 <div onClick={() => setShowHeader(false)}>
@@ -42,6 +42,7 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
 
               {/* Search */}
               <div
+                onClick={(e) => e.stopPropagation()}
                 style={{
                   borderRadius: "28px",
                   border: "0.124rem solid #222327",
@@ -63,7 +64,10 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
               </div>
 
               {/* New Chat */}
-              <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2"
+              >
                 <div className="flex items-center">
                   <NewChat size={20} className="mr-2" />
                   <span className="truncate text-sm md:text-base leading-none">
@@ -79,7 +83,10 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
               </div>
 
               {/* History Header */}
-              <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg"
+              >
                 <div className="flex items-center">
                   <History size={20} className="mr-2" />
                   <span className="truncate text-sm md:text-base leading-none">
@@ -96,7 +103,10 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
             </div>
 
             {/* Scrollable History */}
-            <div className="scrollCustom flex-1 overflow-y-auto px-3 pb-3 mb-3">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="scrollCustom flex-1 overflow-y-auto px-3 pb-3 mb-3"
+            >
               <ul
                 style={{ borderLeft: "0.124rem solid #212123" }}
                 className="flex flex-col gap-2 ml-7 mt-0 pl-3"
@@ -133,10 +143,13 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
           </section>
 
           {/* --------------bottom part-------------- */}
-          <section onClick={(e) => e.stopPropagation()}>
+          <section>
             {/* Profile */}
             <div className="w-full flex items-center justify-between px-3 py-3 bg-transparent border-t border-[#212123]">
-              <div className="flex items-center gap-2 overflow-hidden">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-2 overflow-hidden"
+              >
                 <img
                   className="w-[30px] h-[30px] rounded-full object-cover"
                   src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
@@ -146,7 +159,10 @@ export default function MobileSideBar({ setShowHeader, groupedItems }) {
                   Atikur Rahman
                 </span>
               </div>
-              <div className="cursor-pointer">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="cursor-pointer"
+              >
                 <Settings color={"#a3a3a3"} size={20} />
               </div>
             </div>
