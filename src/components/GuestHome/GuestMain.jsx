@@ -10,10 +10,10 @@ export default function GuestMain({ chatBoxHeieht }) {
       <section>
         <article className="flex items-center gap-3">
           <div>
-            <Logo size={50} />
+            <Logo size={60} />
           </div>
-          <span className="text-[2.7rem] md:text-[2.8rem] lg:text-[3.1rem] leading-none font-medium">
-            lonas
+          <span className="text-[2.7rem] md:text-[3.2rem] lg:text-[3.5rem] leading-none font-medium">
+            Lonas
           </span>
         </article>
       </section>

@@ -8,7 +8,7 @@ export default function AiMsg({ msg }) {
   return (
     <article className="max-w-[100%] flex flex-col justify-center items-start">
       <div className="flex flex-col justify-start items-start gap-2">
-        <div className="w-auto px-4 py-2 rounded-[15px] rounded-es-[0px] prose prose-invert ">
+        <div className="w-auto px-1 py-2 rounded-[15px] rounded-es-[0px] prose prose-invert ">
           <ReactMarkdown
             components={{
               code({ node, inline, className, children, ...props }) {
@@ -46,7 +46,7 @@ export default function AiMsg({ msg }) {
           onClick={() => navigator.clipboard.writeText(msg)}
           className="pl-2"
         >
-          <Copy size={15} />
+          <Copy size={13} />
         </span>
       </div>
     </article>

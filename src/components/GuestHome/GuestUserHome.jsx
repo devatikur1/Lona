@@ -51,6 +51,7 @@ export default function GuestUserHome() {
         <ChatVeiw msgs={msgs} chatBoxHeieht={chatBoxHeieht} />
       )}
       <ChatBox
+        type={"gust"}
         text={text}
         setText={setText}
         lodingMsg={lodingMsg}

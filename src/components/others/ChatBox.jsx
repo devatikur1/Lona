@@ -14,6 +14,7 @@ export default function ChatBox({
   lodingMsg,
   onSend,
   setChatBoxHeieht,
+  type,
 }) {
   const [formHeight, setFormHeight] = useState(36);
   const textareaRef = useRef(null);
@@ -50,7 +51,7 @@ export default function ChatBox({
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
         style={{ borderRadius: "28px" }}
-        className="bg-[#161619] w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%] py-1 px-1.5 md:px-1.5 md:py-2 border border-[#212123] mb-3"
+        className="bg-[#161619] w-[98%] sm:w-[90%] md:w-[80%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%] py-1 px-1 md:px-1.5 md:py-2 border border-[#212123] mb-3"
       >
         <form
           ref={fromref}
@@ -63,8 +64,9 @@ export default function ChatBox({
         >
           {/* Attach Button */}
           <button
+            disabled={type === "gust"}
             type="button"
-            className="bg-transparent hover:bg-[#2d2d2d] transition-colors duration-200 flex items-center justify-center p-2 rounded-full"
+            className="bg-transparent hover:bg-[#2d2d2d] transition-colors duration-200 flex items-center justify-center p-2 rounded-full disabled:opacity-85 disabled:pointer-events-none"
           >
             <AttachIcon size={20} />
           </button>
@@ -81,8 +83,9 @@ export default function ChatBox({
 
           {/* Model select */}
           <button
+            disabled={type === "gust"}
             type="button"
-            className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2"
+            className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 disabled:opacity-85 disabled:pointer-events-none"
           >
             <ModelIcon size={16} />
             {text === "" && (

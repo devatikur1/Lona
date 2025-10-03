@@ -10,7 +10,7 @@ export default function GuestHeader() {
     >
       <nav className="w-full flex justify-between items-center px-2 py-1 cursor-pointer h-full">
         {/* Website name */}
-        <section className="flex items-center px-3 gap-1.5">
+        <section className="flex items-center">
           <Link to={"/"}>
             <div
               className="px-4 py-1.5 rounded-xl 
@@ -20,7 +20,7 @@ export default function GuestHeader() {
                         flex items-center gap-3"
             >
               <span className="text-[1.7rem] md:text-[1.8rem] lg:text-[2rem] leading-none font-medium">
-                lonas
+                Lonas
               </span>
             </div>
           </Link>

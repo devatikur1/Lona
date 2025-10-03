@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function GenLoading({ size = 20, color = "#111" }) {
+export default function GenLoading({ size = 20, color = "currentColor" }) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 20 20"
-      fill="currentColor"
+      fill={color}
       xmlns="http://www.w3.org/2000/svg"
       class="icon"
     >
