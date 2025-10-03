@@ -6,7 +6,7 @@ import { app } from "./firebase/Firebase";
 
 export default function AppContextProvider({ children }) {
   const [showHeader, setShowHeader] = useState(false);
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(() => localStorage.getItem("logged"));
   const [userData, setUserData] = useState(false);
 
   const [text, setText] = useState("");
@@ -17,7 +17,6 @@ export default function AppContextProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log(user);
-
         setLogged(true);
       } else {
         setLogged(false);

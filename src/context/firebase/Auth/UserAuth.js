@@ -34,8 +34,7 @@ const userAuth = {
         { atLastLogin: serverTimestamp() },
         { merge: true }
       );
-
-      console.log("Login Success:", user);
+      localStorage.setItem("logged", true);
       return { type: "data", user };
     } catch (error) {
       console.error("Login Error:", error);
@@ -95,7 +94,7 @@ const userAuth = {
         },
         { merge: true }
       );
-
+      localStorage.setItem("logged", true);
       return { type: "data", user };
     } catch (error) {
       console.error(error);
@@ -126,7 +125,7 @@ const userAuth = {
         },
         { merge: true }
       );
-
+      localStorage.setItem("logged", true);
       return { type: "data", user };
     } catch (error) {
       console.error("GitHub Login Error:", error);
@@ -157,7 +156,7 @@ const userAuth = {
         },
         { merge: true }
       );
-      console.log("Twitter User:", user);
+      localStorage.setItem("logged", true);
       return { type: "data", user };
     } catch (error) {
       console.error("Twitter Login Error:", error);
