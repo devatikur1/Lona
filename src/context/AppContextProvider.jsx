@@ -6,7 +6,7 @@ import { app } from "./firebase/Firebase";
 
 export default function AppContextProvider({ children }) {
   const [showHeader, setShowHeader] = useState(false);
-  const [logged, setLogged] = useState(() => localStorage.getItem("logged"));
+  const [logged, setLogged] = useState(null);
   const [userData, setUserData] = useState(false);
 
   const [text, setText] = useState("");
