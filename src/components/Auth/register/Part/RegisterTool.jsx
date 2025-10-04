@@ -20,7 +20,7 @@ export default function RegisterTool() {
   const [IsGihubAuthSDis, setIsGihubAuthSDis] = useState(false);
 
   //context
-  const { userAuth } = useContext(AppContext);
+  const { userAuth, setUserDataUpdate } = useContext(AppContext);
 
   useEffect(() => {
     async function fetchLocation() {
@@ -42,6 +42,7 @@ export default function RegisterTool() {
     try {
       const app = await userAuth.googleSign(loc);
       setGoogleAuthStutas(app.type === "data" ? "normal" : "error");
+      setUserDataUpdate((prev) => prev + 1);
     } catch (err) {
       setGoogleAuthStutas("error");
     } finally {
@@ -55,6 +56,7 @@ export default function RegisterTool() {
     try {
       const app = await userAuth.gihubSignIn(loc);
       setGihubAuthStutas(app.type === "data" ? "normal" : "error");
+      setUserDataUpdate((prev) => prev + 1);
     } catch (err) {
       setGihubAuthStutas("error");
     } finally {
@@ -68,6 +70,7 @@ export default function RegisterTool() {
     try {
       const app = await userAuth.XSignIn(loc);
       setXAuthStutas(app.type === "data" ? "normal" : "error");
+      setUserDataUpdate((prev) => prev + 1);
     } catch (err) {
       setXAuthStutas("error");
     } finally {
