@@ -6,29 +6,36 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import toast from "react-hot-toast";
 import Logo from "../../../others/Logo";
 
-export default function AiMsg({ setLodingMsg, msg }) {
+export default function AiMsg({ setLodingMsg, msg, endRef }) {
   const [displayedText, setDisplayedText] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
-    const words = msg.split(" ");
-    let i = 0;
+    if (!msg) return;
 
-    const totalDuration = 2500;
-    const delay = Math.max(totalDuration / words.length, 30);
+    const words = msg.split(" ");
+    let currentIndex = 0;
+
+    const totalDuration = 2500; // Total animation duration in ms
+    const delay = Math.max(totalDuration / words.length, 30); // Minimum delay of 30ms
 
     const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + (i === 0 ? words[i] : " " + words[i]));
-      i++;
-      if (i >= words.length) {
+      setDisplayedText((prev) => prev + (currentIndex === 0 ? words[currentIndex] : " " + words[currentIndex]));
+      currentIndex++;
+
+      if (currentIndex >= words.length) {
         clearInterval(interval);
         setLodingMsg(false);
+      }
+
+      // Scroll to the end of the chat
+      if (endRef?.current) {
+        endRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, delay);
 
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msg]);
+  }, [msg, setLodingMsg, endRef]);
 
   const handleCopy = async () => {
     try {
@@ -36,8 +43,8 @@ export default function AiMsg({ setLodingMsg, msg }) {
       setIsCopied(true);
       toast.success("Copied to clipboard");
       setTimeout(() => setIsCopied(false), 2000);
-    } catch (err) {
-      toast.error("Failed to copy");
+    } catch (error) {
+      toast.error("Failed to copy. Please try again.");
     }
   };
 
@@ -53,7 +60,7 @@ export default function AiMsg({ setLodingMsg, msg }) {
         </div>
 
         {/* Message Content */}
-        <div className="w-full max-w-[95%] lg:max-w-full">
+        <div className="w-full max-w-[100%] lg:max-w-full">
           <div className="p-4 lg:p-6">
             <div className="prose prose-invert prose-sm lg:prose-base max-w-none">
               <ReactMarkdown
@@ -152,7 +159,7 @@ export default function AiMsg({ setLodingMsg, msg }) {
                       {children}
                     </td>
                   ),
-                  hr: ({ children }) => <hr className="bg-[#303030] w-full h-[2px]" />,
+                  hr: () => <hr className="bg-[#303030] w-full h-[2px]" />,
                 }}
               >
                 {displayedText}
