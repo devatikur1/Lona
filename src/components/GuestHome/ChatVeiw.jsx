@@ -22,8 +22,8 @@ export default function ChatView({
 
   return (
     <main
-      style={{ height: `calc(100vh - ${chatBoxHeight + 60}px)` }}
-      className="flex w-full min-h-[100vh] pt-8 pb-[350px] justify-center items-start overflow-x-hidden overflow-y-auto max-w-[100vw] bg-gradient-to-b from-gray-900/20 to-transparent chat-scroll"
+      style={{ minHeight: `calc(100vh - ${window.innerHeight - 70}px)` }}
+      className="flex w-full pt-8 pb-[50vh] justify-center items-start overflow-x-hidden overflow-y-auto max-w-[100vw] chat-scroll"
     >
       <section className="w-full px-4 lg:px-6 h-auto flex flex-col gap-6 max-w-[99vw] md:max-w-[90vw] lg:max-w-[75vw] xl:max-w-[65vw] 2xl:w-[60vw]">
         {/* Chat Messages */}

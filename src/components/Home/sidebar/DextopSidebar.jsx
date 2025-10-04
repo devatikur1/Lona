@@ -13,6 +13,7 @@ export default function DextopSidebar({
   baseSidebarClasses,
   groupedItems,
   userData,
+  handleShowSideOption,
 }) {
   return (
     <>
@@ -140,7 +141,10 @@ export default function DextopSidebar({
             {/* Profile */}
             <div className="w-full flex items-center justify-between px-3 py-3 bg-transparent border-t border-[#212123]">
               <div
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShowSideOption?.(e);
+                }}
                 className="flex items-center gap-2 overflow-hidden"
               >
                 {userData && (
@@ -151,6 +155,9 @@ export default function DextopSidebar({
                     alt="profile"
                   />
                 )}
+                <span className="text-sm md:text-base truncate font-medium">
+                  Atikur Rahman
+                </span>
               </div>
               <div className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center">
                 <ToggleBtn />
@@ -208,7 +215,10 @@ export default function DextopSidebar({
             <section>
               <div className="w-full flex flex-col items-center justify-center gap-5 px-3 py-3 bg-transparent border-t border-[#212123]">
                 <div
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleShowSideOption?.(e);
+                  }}
                   className="flex items-center gap-2 overflow-hidden"
                 >
                   {userData && (

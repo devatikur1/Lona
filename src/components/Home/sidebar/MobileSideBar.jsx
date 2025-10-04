@@ -6,7 +6,12 @@ import Logo from "../../../others/Logo";
 import { motion } from "motion/react";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
 
-export default function MobileSideBar({ setShowHeader, groupedItems, userData }) {
+export default function MobileSideBar({
+  setShowHeader,
+  groupedItems,
+  userData,
+  handleShowSideOption,
+}) {
   return (
     <>
       {/* Overlay */}
@@ -164,7 +169,10 @@ export default function MobileSideBar({ setShowHeader, groupedItems, userData })
                 </span>
               </div>
               <div
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShowSideOption?.(e);
+                }}
                 className="cursor-pointer"
               >
                 <Settings color={"#a3a3a3"} size={20} />

@@ -3,9 +3,13 @@ import { AppContext } from "../../context/AppContext";
 import { AnimatePresence } from "motion/react";
 import MobileSideBar from "./sidebar/MobileSideBar";
 import DextopSidebar from "./sidebar/DextopSidebar";
+import SideOption from "./sidebar/SideOption";
 
 export default function Sidebar() {
-  const { showHeader, setShowHeader, userData, setUserDataUpdate } = useContext(AppContext);
+  const { showHeader, setShowHeader, userData } = useContext(AppContext);
+  const [showOption, setShowOption] = useState(false);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
 
   //  window width
   const getInitialWidth = () =>
@@ -40,6 +44,12 @@ export default function Sidebar() {
   const baseSidebarClasses =
     "fixed z-50 md:relative min-h-screen max-h-screen flex flex-col border-r border-[#212123] bg-[#080808] overflow-hidden";
 
+  const handleShowSideOption = (e) => {
+    console.log(Math.round(e.target.closest("main").style.width.replace("px", "")));
+    setX(Math.round(e.target.closest("main").style.width.replace("px", "")));
+    setShowOption((prev) => !prev);
+  };
+
   return (
     <>
       {/* Mobile: render MobileSideBar when showHeader true and viewport narrow */}
@@ -49,6 +59,7 @@ export default function Sidebar() {
             groupedItems={groupedItems}
             setShowHeader={setShowHeader}
             userData={userData}
+            handleShowSideOption={handleShowSideOption}
           />
         )}
       </AnimatePresence>
@@ -63,9 +74,13 @@ export default function Sidebar() {
             baseSidebarClasses={baseSidebarClasses}
             groupedItems={groupedItems}
             userData={userData}
+            handleShowSideOption={handleShowSideOption}
           />
         )}
       </AnimatePresence>
+
+      {/* Dropdown Option Box */}
+      <SideOption showOption={showOption} x={x} y={y} />
     </>
   );
 }
