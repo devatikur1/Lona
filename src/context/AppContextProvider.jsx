@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 import userAuth from "./firebase/Auth/UserAuth";
@@ -20,7 +21,7 @@ export default function AppContextProvider({ children }) {
   /// curent user data
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {  
-      if (user && Boolean(localStorage.getItem("logged")) === true) {
+      if (user && localStorage.getItem("logged") == "true") {
         setLogged(true);
         const docRef = doc(fireStore, "users", user.uid);
         const docSnap = await getDoc(docRef);

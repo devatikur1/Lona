@@ -199,7 +199,7 @@ export default function RegisterMainForm() {
       let location = await getLocationInfo();
       let app = await userAuth.signUp(email, pass, fullName, location);
       setFromStatus(app.type === "data" ? "sended" : "error");
-      navigate("account/sign-in");
+      navigate("/account/sign-in");
       toast.success("Register Successfully");
     } catch (error) {
       setFromStatus("error");

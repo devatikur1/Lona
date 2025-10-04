@@ -13,8 +13,9 @@ export default function LoggedUserHome() {
       >
         <Sidebar />
       </section>
-      <section className="w-full">
-        <Header />j
+      <section className="w-full h-full">
+        <Header />
+        
       </section>
     </aside>
   );

@@ -12,7 +12,7 @@ export default function Register() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (logged) {
+    if (logged === true) {
       navigate("/account");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
