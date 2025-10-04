@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Copy, Bot, CheckCircle } from "lucide-react";
+import { Copy, CheckCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
