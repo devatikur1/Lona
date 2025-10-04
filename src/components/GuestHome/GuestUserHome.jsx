@@ -11,11 +11,13 @@ export default function GuestUserHome() {
   const [msgs, setmsgs] = useState([]);
   const [chatBoxHeieht, setChatBoxHeieht] = useState(70);
   const [lodingMsg, setLodingMsg] = useState(false);
+  const [AiMsgLoading, setAiMsgLoading] = useState(false);
 
   async function onSend() {
     let ChatCount = parseInt(localStorage.getItem("chat-count"));
     if (!text.trim() || ChatCount === 4) return;
     setLodingMsg(true);
+    setAiMsgLoading(true);
 
     const newChat = {
       type: "user",
@@ -32,7 +34,6 @@ export default function GuestUserHome() {
     }));
 
     const aiResponse = await AI.geminiText(text, contextMsgs);
-    console.log(aiResponse.content);
 
     const aiChat = {
       type: "ai",
@@ -41,6 +42,7 @@ export default function GuestUserHome() {
     };
     localStorage.setItem("chat-count", ChatCount + 1);
     setmsgs((prev) => [...prev, aiChat]);
+    setAiMsgLoading(false);
   }
 
   return (
@@ -52,6 +54,7 @@ export default function GuestUserHome() {
           setLodingMsg={setLodingMsg}
           msgs={msgs}
           chatBoxHeieht={chatBoxHeieht}
+          AiMsgLoading={AiMsgLoading}
         />
       )}
       <ChatBox
