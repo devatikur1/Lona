@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Email from "../AuthPart/Email";
 import PassAndChechBox from "../AuthPart/PassAndChechBox";
 import { AnimatePresence } from "motion/react";
 import Btn from "../AuthPart/Btn";
 import GoBack from "../AuthPart/GoBack";
 import { AppContext } from "../../../context/AppContext";
+import toast from "react-hot-toast";
 
 export default function LoginMainFrom() {
   // form
@@ -31,6 +32,9 @@ export default function LoginMainFrom() {
 
   //context
   const { userAuth } = useContext(AppContext);
+
+  // router-dom
+  const navigate = useNavigate();
 
   // validateEmail
   function validateEmail(email) {
@@ -116,10 +120,13 @@ export default function LoginMainFrom() {
 
     if (type === "data") {
       setformStatus("sended");
+      toast.success("Login Successfully");
       setEmailValid(true);
       setPassValid(true);
+      navigate("/account");
     } else if (type === "error") {
       setformStatus("error");
+      toast.error("Invalid form ditails");
       setEmailErr(true);
       setPassErr(true);
     }
