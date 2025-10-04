@@ -17,9 +17,10 @@ export default function AppContextProvider({ children }) {
   const auth = getAuth(app);
   const fireStore = getFirestore(app);
 
+  /// curent user data
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user && Boolean(localStorage.getItem("logged"))) {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {  
+      if (user && Boolean(localStorage.getItem("logged")) === true) {
         setLogged(true);
         const docRef = doc(fireStore, "users", user.uid);
         const docSnap = await getDoc(docRef);

@@ -6,13 +6,11 @@ export const saveUserData = async (fireStore, user, provider, location, photoURL
 
   if (photoURL) {
     try {
-      const response = await fetch(photoURL);
-      const blob = await response.blob();
-      const file = new File([blob], "profile.jpg", { type: blob.type });
-      uploadedUrl = (await addImageInStorage(file)) || photoURL; // fallback
+      uploadedUrl = (await addImageInStorage(photoURL)) || uploadedUrl;
     } catch (err) {
       console.error("Image upload failed:", err);
       uploadedUrl = photoURL;
+      console.log(uploadedUrl);
     }
   }
 
