@@ -1,4 +1,4 @@
-import { EllipsisVertical, History, Search, Settings } from "lucide-react";
+import { EllipsisVertical, History, Search } from "lucide-react";
 import React from "react";
 import NewChat from "../../../others/NewChat";
 import ToggleBtn from "../../../others/ToggleBtn";
@@ -151,9 +151,12 @@ export default function MobileSideBar({
           {/* --------------bottom part-------------- */}
           <section>
             {/* Profile */}
-            <div className="w-full flex items-center justify-between px-3 py-3 bg-transparent border-t border-[#212123]">
+            <div className="w-full flex items-center justify-start px-3 py-3 bg-transparent border-t border-[#212123]">
               <div
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShowSideOption?.(e);
+                }}
                 className="flex items-center gap-2 overflow-hidden"
               >
                 {userData && (
@@ -164,18 +167,6 @@ export default function MobileSideBar({
                     alt="profile"
                   />
                 )}
-                <span className="text-sm md:text-base truncate font-medium">
-                  Atikur Rahman
-                </span>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleShowSideOption?.(e);
-                }}
-                className="cursor-pointer"
-              >
-                <Settings color={"#a3a3a3"} size={20} />
               </div>
             </div>
           </section>

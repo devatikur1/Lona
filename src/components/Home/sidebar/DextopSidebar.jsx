@@ -155,9 +155,6 @@ export default function DextopSidebar({
                     alt="profile"
                   />
                 )}
-                <span className="text-sm md:text-base truncate font-medium">
-                  Atikur Rahman
-                </span>
               </div>
               <div className="hover:bg-[#1f1f22] transition-all duration-200 p-2.5 rounded-full flex justify-center items-center">
                 <ToggleBtn />
