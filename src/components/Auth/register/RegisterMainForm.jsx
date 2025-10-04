@@ -1,6 +1,6 @@
 // RegisterMainForm.jsx
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
 import GoBack from "../AuthPart/GoBack";
 import RegisterEmail from "../AuthPart/RegisterEmail";
@@ -24,6 +24,7 @@ import { getOS } from "../../../hooks/useGetOs";
 import { getGeoLocation } from "../../../hooks/useGetGeoLocation";
 import { getData } from "../../../hooks/useGetData";
 import { AppContext } from "../../../context/AppContext";
+import toast from "react-hot-toast";
 
 export default function RegisterMainForm() {
   // form
@@ -54,6 +55,9 @@ export default function RegisterMainForm() {
 
   // constext
   const { userAuth } = useContext(AppContext);
+
+  // router-dom
+  const navigate = useNavigate();
 
   const db = getFirestore(app);
 
@@ -195,8 +199,11 @@ export default function RegisterMainForm() {
       let location = await getLocationInfo();
       let app = await userAuth.signUp(email, pass, fullName, location);
       setFromStatus(app.type === "data" ? "sended" : "error");
+      navigate("account/sign-in");
+      toast.success("Register Successfully");
     } catch (error) {
       setFromStatus("error");
+      toast.error("Something problem");
     }
   }
 
