@@ -13,11 +13,10 @@ export default function LogIn() {
 
   useEffect(() => {
     if (logged) {
-      navigate("/account")
+      navigate("/account");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logged]);
-  
 
   return (
     <aside className="flex w-screen min-h-screen overflow-x-hidden overscroll-y-auto scrollCustom scrollVeiwNone *:select-none">

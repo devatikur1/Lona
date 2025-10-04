@@ -5,7 +5,7 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 
 export default function Register() {
-    const { logged } = useContext(AppContext);
+  const { logged } = useContext(AppContext);
   const [searchParams] = useSearchParams();
 
   const method = searchParams.get("method");

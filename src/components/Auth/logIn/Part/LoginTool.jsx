@@ -7,7 +7,7 @@ import { getOS } from "../../../../hooks/useGetOs";
 import { getGeoLocation } from "../../../../hooks/useGetGeoLocation";
 import { getData } from "../../../../hooks/useGetData";
 
-export default function LoginTool() {  // some
+export default function LoginTool() {
   const [loc, setLoc] = useState({});
 
   // sign in mathor
