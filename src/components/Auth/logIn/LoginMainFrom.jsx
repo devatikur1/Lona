@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Email from "../AuthPart/Email";
 import PassAndChechBox from "../AuthPart/PassAndChechBox";
 import { AnimatePresence } from "motion/react";
@@ -31,10 +31,7 @@ export default function LoginMainFrom() {
   const [passLoading, setPassLoading] = useState(false);
 
   //context
-  const { userAuth } = useContext(AppContext);
-
-  // router-dom
-  const navigate = useNavigate();
+  const { userAuth, setUserDataUpdate } = useContext(AppContext);
 
   // validateEmail
   function validateEmail(email) {
@@ -123,7 +120,7 @@ export default function LoginMainFrom() {
       toast.success("Login Successfully");
       setEmailValid(true);
       setPassValid(true);
-      navigate("/account");
+      setUserDataUpdate((prev) => prev + 1);
     } else if (type === "error") {
       setformStatus("error");
       toast.error("Invalid form ditails");
