@@ -33,5 +33,5 @@ export const saveUserData = async (fireStore, user, provider, location, photoURL
     { merge: true }
   );
 
-  localStorage.setItem("logged", "true");
+  localStorage.setItem("logged", true);
 };

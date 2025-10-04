@@ -71,7 +71,7 @@ const userAuth = {
         provider: "email",
         location,
       });
-
+      localStorage.setItem("logged", false);
       return { type: "data", user };
     } catch (error) {
       console.error("SignUp Error:", error);
