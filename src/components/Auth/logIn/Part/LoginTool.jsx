@@ -52,7 +52,7 @@ export default function LoginTool() {
     setIsGihubAuthSDis(true);
     setGihubAuthStutas("loading");
     try {
-      const app = await userAuth.gihubSignIn(loc);
+      const app = await userAuth.githubSign(loc);
       setGihubAuthStutas(app.type === "data" ? "normal" : "error");
       setUserDataUpdate((prev) => prev + 1);
     } catch (err) {
@@ -66,7 +66,7 @@ export default function LoginTool() {
     setIsXAuthDis(true);
     setXAuthStutas("loading");
     try {
-      const app = await userAuth.XSignIn(loc);
+      const app = await userAuth.twitterSign(loc);
       setXAuthStutas(app.type === "data" ? "normal" : "error");
       setUserDataUpdate((prev) => prev + 1);
     } catch (err) {
