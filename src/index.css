@@ -14,7 +14,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #fff;
+  color: #ededed;
   font-family: font1;
 }
 
@@ -121,10 +121,10 @@ body {
 }
 
 .padding_right_32 {
-    padding-right: 32px;
+  padding-right: 32px;
 }
 .padding_right_52 {
-    padding-right: 52px;
+  padding-right: 52px;
 }
 
 .forgetBtn {
