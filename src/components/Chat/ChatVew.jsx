@@ -1,14 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import { Toaster } from "react-hot-toast";import Logo from "../../others/Logo";
+import { Toaster } from "react-hot-toast";
+import Logo from "../../others/Logo";
 import UserMsg from "./UserMsg";
-;
-
-export default function ChatView({
-  setLodingMsg,
-  chatBoxHeight,
-  msgs,
-  AiMsgLoading,
-}) {
+import AiMsg from "./AiMsg";
+export default function ChatView({ setLodingMsg, chatBoxHeight, msgs, AiMsgLoading }) {
   const endRef = useRef(null);
 
   // Auto scroll to bottom whenever msgs update
@@ -27,16 +22,16 @@ export default function ChatView({
         {/* Chat Messages */}
         {msgs.map((msg, index) => {
           if (msg.type === "user") {
-            return <UserMsg src={msg.imgLink} key={index} msg={msg.text} />;
+            return <UserMsg key={index} src={msg.imgLink} msg={msg.text} />;
           } else if (msg.type === "ai") {
-            // return (
-            //   <AiMsg
-            //     endRef={endRef}
-            //     setLodingMsg={setLodingMsg}
-            //     key={index}
-            //     msg={msg.prompt}
-            //   />
-            // );
+            return (
+              <AiMsg
+                key={index}
+                endRef={endRef}
+                setLodingMsg={setLodingMsg}
+                msg={msg.text}
+              />
+            );
           }
           return null;
         })}

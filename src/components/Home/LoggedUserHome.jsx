@@ -46,8 +46,8 @@ export default function LoggedUserHome() {
     try {
       const userRef = doc(fireStore, "chats", userData.id);
       const userSnap = await getDoc(userRef);
-      console.log(userSnap.exists());
 
+      // 1️⃣ Create user doc if not exists
       if (!userSnap.exists()) {
         await setDoc(userRef, {
           id: userData.id,
@@ -58,25 +58,33 @@ export default function LoggedUserHome() {
         console.log("New user doc created ✅");
       }
 
-      let id = generateUniqueId();
-      console.log(id);
+      // 2️⃣ Generate new chat session id
+      let newChatId = generateUniqueId();
+      const chatDataRef = doc(userRef, newChatId, "data");
 
-      const messagesRef = collection(userRef, id);
-
-      const messages = {
-        type: "user",
-        text,
+      // 3️⃣ Initial chat object
+      const chatObject = {
+        title: "New Chat",
         createdAt: Timestamp.now(),
-        imgLink: "",
+        chats: [
+          {
+            type: "user",
+            text,
+            createdAt: Timestamp.now(),
+            imgLink: "",
+          },
+        ],
+        id: newChatId,
       };
 
-      await addDoc(messagesRef, messages);
-      console.log(id);
+      // 4️⃣ Save the document
+      await setDoc(chatDataRef, chatObject);
 
-      navigate(`/c/${id}`);
-
-      setLoading(false);
+      // 5️⃣ Navigate to the new chat
+      navigate(`/c/${newChatId}`);
     } catch (error) {
+      console.error("Error creating chat:", error);
+    } finally {
       setLoading(false);
     }
   }

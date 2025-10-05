@@ -19,7 +19,7 @@ export default function App() {
     createRoutesFromElements(
       <Route path="/" element={<LoggedUiLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="c/:id" element={<ChatPage />} />
+        <Route path="c/:chatId" element={<ChatPage />} />
         <Route path="account" element={<AuthRootLayout />}>
         <Route index element={<AccountPage />} />
           <Route path="sign-in" element={<LogIn />} />

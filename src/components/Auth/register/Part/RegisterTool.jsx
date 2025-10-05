@@ -26,7 +26,6 @@ export default function RegisterTool() {
     async function fetchLocation() {
       try {
         const location = await getLocationInfo();
-        console.log("Location on mount:", location);
         setLoc(location);
       } catch (err) {
         console.warn("User blocked location on mount:", err);
