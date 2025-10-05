@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import UserMsg from "./Chat/UserMsg";
-import AiMsg from "./Chat/AiMsg";
-import { Toaster } from "react-hot-toast";
-import Logo from "../../others/Logo";
+import { Toaster } from "react-hot-toast";import Logo from "../../others/Logo";
+import UserMsg from "./UserMsg";
+;
 
 export default function ChatView({
   setLodingMsg,
@@ -11,7 +10,7 @@ export default function ChatView({
   AiMsgLoading,
 }) {
   const endRef = useRef(null);
-  
+
   // Auto scroll to bottom whenever msgs update
   useEffect(() => {
     if (endRef.current) {
@@ -28,11 +27,16 @@ export default function ChatView({
         {/* Chat Messages */}
         {msgs.map((msg, index) => {
           if (msg.type === "user") {
-            return <UserMsg key={index} msg={msg.prompt} />;
+            return <UserMsg src={msg.imgLink} key={index} msg={msg.text} />;
           } else if (msg.type === "ai") {
-            return (
-              <AiMsg endRef={endRef} setLodingMsg={setLodingMsg} key={index} msg={msg.prompt} />
-            );
+            // return (
+            //   <AiMsg
+            //     endRef={endRef}
+            //     setLodingMsg={setLodingMsg}
+            //     key={index}
+            //     msg={msg.prompt}
+            //   />
+            // );
           }
           return null;
         })}
@@ -52,9 +56,9 @@ export default function ChatView({
               {/* Loading Message */}
               <div>
                 <div className="p-4 lg:p-6">
-                    <span className="font-medium text-purple-400">
-                      AI is thinking...
-                    </span>
+                  <span className="font-medium text-purple-400">
+                    AI is thinking...
+                  </span>
                 </div>
               </div>
             </div>

@@ -12,12 +12,14 @@ import AuthRootLayout from "./layout/AuthRootLayout";
 import LogIn from "./pages/Auth/LogIn";
 import Register from "./pages/Auth/Register";
 import AccountPage from "./pages/AccountPage";
+import ChatPage from "./pages/ChatPage";
 
 export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<LoggedUiLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="c/:id" element={<ChatPage />} />
         <Route path="account" element={<AuthRootLayout />}>
         <Route index element={<AccountPage />} />
           <Route path="sign-in" element={<LogIn />} />

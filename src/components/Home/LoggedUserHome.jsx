@@ -1,8 +1,86 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import ChatBox from "./ChatBox";
+import GuestMain from "../GuestHome/GuestMain";
+import { AppContext } from "../../context/AppContext";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
+import { app } from "../../context/firebase/Firebase";
+import { useNavigate } from "react-router-dom";
+import LoadingComponent from "../Chat/LoadingComponent";
 
 export default function LoggedUserHome() {
+  const [text, setText] = useState("");
+  const [file, setFile] = useState({});
+  const [chatBoxHeieht, setChatBoxHeieht] = useState(70);
+  const [loading, setLoading] = useState(false);
+
+  const { userData } = useContext(AppContext);
+
+  // router
+  let navigate = useNavigate();
+
+  // firebase
+  const fireStore = getFirestore(app);
+
+  function generateUniqueId() {
+    if (crypto?.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return (
+      Date.now().toString(36) + "-" + Math.random().toString(36).substr(2, 9)
+    );
+  }
+
+  // 🔹 Full async function to handle sending a message
+  async function onSend(text) {
+    setLoading(true);
+    try {
+      const userRef = doc(fireStore, "chats", userData.id);
+      const userSnap = await getDoc(userRef);
+      console.log(userSnap.exists());
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          id: userData.id,
+          name: userData.name || "",
+          email: userData.email || "",
+          createdAt: Timestamp.now(),
+        });
+        console.log("New user doc created ✅");
+      }
+
+      let id = generateUniqueId();
+      console.log(id);
+
+      const messagesRef = collection(userRef, id);
+
+      const messages = {
+        type: "user",
+        text,
+        createdAt: Timestamp.now(),
+        imgLink: "",
+      };
+
+      await addDoc(messagesRef, messages);
+      console.log(id);
+
+      navigate(`/c/${id}`);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+
   return (
     <aside className="flex">
       <section
@@ -13,9 +91,19 @@ export default function LoggedUserHome() {
       >
         <Sidebar />
       </section>
-      <section className="w-full h-full">
+      <section className="relative w-full h-screen flex flex-col justify-start items-start touch-none overflow-hidden">
         <Header />
-        
+        {!loading && <GuestMain chatBoxHeieht={chatBoxHeieht} />}
+        {loading && <LoadingComponent chatBoxHeieht={chatBoxHeieht} />}
+        <ChatBox
+          text={text}
+          setText={setText}
+          file={file}
+          setFile={setFile}
+          setChatBoxHeieht={setChatBoxHeieht}
+          onSend={onSend}
+          loading={loading}
+        />
       </section>
     </aside>
   );

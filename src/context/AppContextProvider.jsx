@@ -26,7 +26,7 @@ export default function AppContextProvider({ children }) {
         const docRef = doc(fireStore, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setUserData(docSnap.data());
+          setUserData(docSnap.data());   
         } else {
           setUserData(null);
         }

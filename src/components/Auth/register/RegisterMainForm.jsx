@@ -194,7 +194,7 @@ export default function RegisterMainForm() {
     let valid = checkName();
     if (!valid) return;
     setFromStatus("sending");
-    let fullName = `${firstName} + " " + ${lastName}`;
+    let fullName = `${firstName} ${lastName}`;
     try {
       let location = await getLocationInfo();
       let app = await userAuth.signUp(email, pass, fullName, location);
