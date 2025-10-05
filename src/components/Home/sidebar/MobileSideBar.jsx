@@ -159,11 +159,18 @@ export default function MobileSideBar({
                 }}
                 className="flex items-center gap-2 overflow-hidden"
               >
-                {userData && (
+                {!userData && userData.profileImgUrl === null ? (
                   <img
                     loading="lazy"
                     className="w-[30px] h-[30px] rounded-full object-cover"
-                    src={userData.profileImgUrl || emptyProfile}
+                    src={emptyProfile}
+                    alt="profile"
+                  />
+                ) : (
+                  <img
+                    loading="lazy"
+                    className="w-[30px] h-[30px] rounded-full object-cover"
+                    src={userData.profileImgUrl}
                     alt="profile"
                   />
                 )}
