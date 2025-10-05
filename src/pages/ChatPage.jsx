@@ -39,10 +39,10 @@ export default function ChatPage() {
 
     const fetchMessages = async () => {
       const subColId = location.pathname.split("/")[2];
-      if (!subColId && !userData) return; // safety check
+      if (!subColId && !userData) return;
 
       try {
-        const userRef = doc(fireStore, "chats", "aAGK5uzzT7YUlchKKJiUOKz8eUj2");
+        const userRef = doc(fireStore, "chats", userData.id);
         const messagesRef = collection(userRef, subColId);
         const snapshot = await getDocs(messagesRef);
 
