@@ -5,6 +5,7 @@ import ToggleBtn from "../../../others/ToggleBtn";
 import Logo from "../../../others/Logo";
 import { motion } from "motion/react";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
+import { Link } from "react-router-dom";
 
 export default function MobileSideBar({
   setShowHeader,
@@ -70,7 +71,7 @@ export default function MobileSideBar({
               </div>
 
               {/* New Chat */}
-              <div
+              <Link to={"/"}
                 onClick={(e) => e.stopPropagation()}
                 className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2"
               >
@@ -86,7 +87,7 @@ export default function MobileSideBar({
                 >
                   Ctrl+N
                 </span>
-              </div>
+              </Link>
 
               {/* History Header */}
               <div

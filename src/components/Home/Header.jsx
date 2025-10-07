@@ -2,14 +2,19 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Ellipsis, MenuIcon } from "lucide-react";
 import Option from "./header/Option";
 import { AppContext } from "../../context/AppContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 export default function Header() {
   const [showOption, setShowOption] = useState(false);
+  const [subColId, setSubColId] = useState("");
   const buttonRef = useRef(null);
   const optionRef = useRef(null);
 
   const { setShowHeader } = useContext(AppContext);
+
+  // router
+  const location = useLocation();
 
   // Outside click detection
   useEffect(() => {
@@ -29,6 +34,11 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const subColId = location.pathname.split("/")[2];
+    setSubColId(subColId);
+  }, [location.pathname]);
 
   return (
     <header
@@ -61,10 +71,11 @@ export default function Header() {
 
         {/* Dropdown show/unshow btn */}
         <div
-          className="px-2 py-1 rounded-xl 
-                        bg-transparent border border-transparent 
-                        hover:bg-[#0d0d0d] hover:border-[#252525]
-                        transition-colors duration-300 ease-in-out"
+          className={clsx(
+            "px-2 py-1 rounded-xl bg-transparent border border-transparent hover:bg-[#0d0d0d] hover:border-[#252525] transition-colors duration-300 ease-in-out",
+            !subColId && "opacity-0",
+            subColId && "opacity-100"
+          )}
         >
           <span onClick={() => setShowOption((prev) => !prev)} ref={buttonRef}>
             <Ellipsis size={23} />

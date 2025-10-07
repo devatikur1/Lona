@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Info, Trash2 } from "lucide-react";
 import NewChat from "../../../others/NewChat";
+import { Link } from "react-router-dom";
 
 const option = ({ showOption, optionRef }) => {
   return (
@@ -16,10 +17,10 @@ const option = ({ showOption, optionRef }) => {
           className="absolute top-14 right-4 bg-[#121212] shadow-lg border border-[#212123] rounded-xl w-48 z-50 overflow-hidden"
         >
           <ul className="w-full flex flex-col gap-1 py-2 px-2">
-            <li className="flex items-center gap-2 hover:bg-[#1f1f22] px-5 py-2 rounded-xl text-white cursor-pointer">
+            <Link to={"/"} className="flex items-center gap-2 hover:bg-[#1f1f22] px-5 py-2 rounded-xl text-white cursor-pointer">
               <NewChat size={20} />
               <span className="text-sm">New Chat</span>
-            </li>
+            </Link>
             <li className="flex items-center gap-2 hover:bg-[#1f1f22] px-5 py-2 rounded-xl text-white cursor-pointer">
               <Info size={20} />
               <span className="text-sm">Info</span>

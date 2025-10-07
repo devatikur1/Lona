@@ -18,6 +18,7 @@ import LoadingComponent from "../components/Chat/LoadingComponent";
 import AI from "../context/AI";
 import ChatBotOption from "../components/Chat/ChatBotOption";
 import ModelIcon from "../others/ModelIcon";
+import toast, { Toaster } from "react-hot-toast";
 // import { Image } from "lucide-react";
 
 export default function ChatPage() {
@@ -69,8 +70,18 @@ export default function ChatPage() {
         const snapshot = await getDoc(chatDataRef);
 
         if (!snapshot.exists()) {
-          console.log("No messages found");
           setmsgs([]);
+          toast("This Link is not valid", {
+            icon: "🚫",
+            style: {
+              borderRadius: "8px",
+              background: "#161619",
+              color: "#fff",
+            },
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 3000);
           return;
         }
 
@@ -295,6 +306,7 @@ export default function ChatPage() {
           setShowOption={setShowOption}
         />
       </section>
+      <Toaster position="top-center" reverseOrder={false} />
     </aside>
   );
 }
