@@ -20,7 +20,7 @@ export default function ChatView({ setLodingMsg, chatBoxHeight, msgs, AiMsgLoadi
     >
       <section className="w-full px-4 lg:px-6 h-auto flex flex-col gap-6 max-w-[99vw] md:max-w-[90vw] lg:max-w-[75vw] xl:max-w-[65vw] 2xl:w-[60vw]">
         {/* Chat Messages */}
-        {msgs.map((msg, index) => {
+        {msgs && msgs.map((msg, index) => {
           if (msg.type === "user") {
             return <UserMsg key={index} src={msg.imgLink} msg={msg.text} />;
           } else if (msg.type === "ai") {
@@ -37,7 +37,7 @@ export default function ChatView({ setLodingMsg, chatBoxHeight, msgs, AiMsgLoadi
         })}
 
         {/* AI Loading State */}
-        {AiMsgLoading && (
+        {AiMsgLoading === true && (
           <article className="w-full max-w-full flex flex-col justify-center items-start mb-6">
             <div className="flex flex-col justify-start items-start gap-0 w-full">
               {/* AI Avatar and Header */}

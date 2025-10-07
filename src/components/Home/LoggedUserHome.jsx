@@ -5,8 +5,6 @@ import ChatBox from "./ChatBox";
 import GuestMain from "../GuestHome/GuestMain";
 import { AppContext } from "../../context/AppContext";
 import {
-  addDoc,
-  collection,
   doc,
   getDoc,
   getFirestore,

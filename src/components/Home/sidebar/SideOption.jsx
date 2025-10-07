@@ -4,7 +4,7 @@ import { LogOut, Settings, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
 
-const SideOption = ({ showOption, x, y }) => {
+const SideOption = ({ optionRef, showOption, x, y }) => {
     const { userAuth } = useContext(AppContext);
 
   // Accept number
@@ -22,6 +22,7 @@ const SideOption = ({ showOption, x, y }) => {
     <AnimatePresence>
       {showOption && (
         <motion.div
+          ref={optionRef}
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}

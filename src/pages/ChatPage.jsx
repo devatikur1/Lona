@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Home/Sidebar";
 import Header from "../components/Home/Header";
@@ -16,16 +16,20 @@ import { app } from "../context/firebase/Firebase";
 import { AppContext } from "../context/AppContext";
 import LoadingComponent from "../components/Chat/LoadingComponent";
 import AI from "../context/AI";
+import ChatBotOption from "../components/Chat/ChatBotOption";
+import ModelIcon from "../others/ModelIcon";
+import { Image } from "lucide-react";
 
 export default function ChatPage() {
   const [text, setText] = useState("");
-  const [file, setFile] = useState({});
   const [msgs, setmsgs] = useState([]);
   const [chatBoxHeieht, setChatBoxHeieht] = useState(70);
   const [lodingMsg, setLodingMsg] = useState(false);
   const [AiMsgLoading, setAiMsgLoading] = useState(false);
-
-  const [updateData, setUpdateData] = useState(0);
+  const [modelInfo, setModelInfo] = useState({
+    title: "Auto",
+    icon: <ModelIcon size={16} />,
+  });
 
   // firebase
   const fireStore = getFirestore(app);
@@ -36,6 +40,13 @@ export default function ChatPage() {
 
   // context
   const { userData, logged } = useContext(AppContext);
+
+  // ref
+  const aiCalledRef = useRef(false);
+
+  // some
+  const optionRef = useRef(null);
+  const [showOption, setShowOption] = useState(true);
 
   useEffect(() => {
     if (logged === false) {
@@ -50,6 +61,7 @@ export default function ChatPage() {
       if (!subColId || !userData?.id) return;
 
       try {
+        setLodingMsg(true);
         const userRef = doc(fireStore, "chats", userData.id);
         const chatDataRef = doc(userRef, subColId, "data");
 
@@ -66,15 +78,20 @@ export default function ChatPage() {
         setmsgs(data);
 
         // AI response if only one user message exists
-        if (data.length === 1 && data[0].type === "user") {
+        if (
+          data.length === 1 &&
+          data[0].type === "user" &&
+          !aiCalledRef.current
+        ) {
+          aiCalledRef.current = true;
+          setAiMsgLoading(true);
           const contextMsgs = data.map((m) => ({
             role: m.type === "user" ? "user" : "model",
             parts: [{ text: m.text }],
           }));
 
-          setAiMsgLoading(true);
-
           const aiResponse = await AI.geminiText(data[0].text, contextMsgs);
+          setLodingMsg(false);
           const aiChat = {
             type: "ai",
             text: aiResponse.content,
@@ -82,16 +99,17 @@ export default function ChatPage() {
             imgLink: "",
           };
 
+          if (AiMsgLoading === false) {
+            setmsgs((prev) => [...prev, aiChat]);
+          }
           // Update Firestore with AI message
           await updateDoc(chatDataRef, {
             chats: arrayUnion(aiChat),
           });
-          setUpdateData((prev) => prev + 1);
+          setAiMsgLoading(false);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
-      } finally {
-        setAiMsgLoading(false);
       }
     };
 
@@ -99,36 +117,75 @@ export default function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData, location.pathname]);
 
-  useEffect(() => {
-    async function updateDataFuntion() {
+  function onSend() {
+    async function fetchAIMag() {
       const subColId = location.pathname.split("/")[2];
       if (!subColId || !userData?.id) return;
 
       try {
+        setLodingMsg(true);
         const userRef = doc(fireStore, "chats", userData.id);
         const chatDataRef = doc(userRef, subColId, "data");
 
-        const snapshot = await getDoc(chatDataRef);
+        // AI response if only one user message exists
+        if (text) {
+          const userChat = {
+            type: "user",
+            text: text.trim(),
+            createdAt: Timestamp.now(),
+            imgLink: "",
+          };
 
-        if (!snapshot.exists()) {
-          console.log("No messages found");
-          setmsgs([]);
-          return;
+          setmsgs((prev) => [...prev, userChat]);
+
+          await updateDoc(chatDataRef, {
+            chats: arrayUnion(userChat),
+          });
+
+          const contextMsgs = msgs.map((m) => ({
+            role: m.type === "user" ? "user" : "model",
+            parts: [{ text: m.text }],
+          }));
+
+          setAiMsgLoading(true);
+          let prompt = text.trim();
+
+          setText("");
+          const aiResponse = await AI.geminiText(prompt, contextMsgs);
+          const aiChat = {
+            type: "ai",
+            text: aiResponse.content,
+            createdAt: Timestamp.now(),
+            imgLink: "",
+          };
+          setmsgs((prev) => [...prev, aiChat]);
+
+          // Update Firestore with AI message
+          await updateDoc(chatDataRef, {
+            chats: arrayUnion(aiChat),
+          });
         }
-
-        const data = snapshot.data().chats || [];
-        setmsgs(data);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     }
 
-    updateDataFuntion();
-  }, [updateData]);
-
-  function onSend() {
-    console.log("hhh");
+    fetchAIMag();
   }
+
+  // Outside click detection
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionRef.current && !optionRef.current.contains(event.target)) {
+        setShowOption(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <aside className="flex">
@@ -152,14 +209,21 @@ export default function ChatPage() {
         {msgs.length === 0 && (
           <LoadingComponent chatBoxHeieht={chatBoxHeieht} />
         )}
+        <ChatBotOption
+          optionRef={optionRef}
+          chatBoxHeieht={chatBoxHeieht}
+          showOption={showOption}
+          setModelInfo={setModelInfo}
+          setShowOption={setShowOption}
+        />
         <ChatBox
           text={text}
+          modelInfo={modelInfo}
           setText={setText}
-          file={file}
-          setFile={setFile}
           lodingMsg={lodingMsg}
           setChatBoxHeieht={setChatBoxHeieht}
           onSend={onSend}
+          setShowOption={setShowOption}
         />
       </section>
     </aside>

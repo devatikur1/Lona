@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { AnimatePresence } from "motion/react";
 import MobileSideBar from "./sidebar/MobileSideBar";
@@ -10,6 +10,8 @@ export default function Sidebar() {
   const [showOption, setShowOption] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
+
+  const optionRef = useRef(null);
 
   //  window width
   const getInitialWidth = () =>
@@ -51,6 +53,23 @@ export default function Sidebar() {
     setShowOption((prev) => !prev);
   };
 
+    // Outside click detection
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          optionRef.current &&
+          !optionRef.current.contains(event.target) 
+        ) {
+          setShowOption(false);
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
   return (
     <>
       {/* Mobile: render MobileSideBar when showHeader true and viewport narrow */}
@@ -81,7 +100,7 @@ export default function Sidebar() {
       </AnimatePresence>
 
       {/* Dropdown Option Box */}
-      <SideOption showOption={showOption} x={x} y={y} />
+      <SideOption optionRef={optionRef} showOption={showOption} x={x} y={y} />
     </>
   );
 }
