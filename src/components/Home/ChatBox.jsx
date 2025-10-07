@@ -1,8 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
-import AttachIcon from "../../others/AttachIcon";
 import { motion } from "motion/react";
-import ModelIcon from "../../others/ModelIcon";
 import Send from "../../others/Send";
 import clsx from "clsx";
 import Footer from "./Footer";
@@ -11,11 +9,12 @@ import GenLoading from "../../others/GenLoading";
 export default function ChatBox({
   text,
   setText,
-  file,
-  setFile,
-  onSend,
+  modelInfo,
   setChatBoxHeieht,
+  onSend,
   loading,
+  setShowOption,
+  showOption,
 }) {
   const [formHeight, setFormHeight] = useState(36);
   const textareaRef = useRef(null);
@@ -64,24 +63,48 @@ export default function ChatBox({
             formHeight > 36 && "items-end"
           )}
         >
-          {/* Attach Button */}
-
-          <input
-            onChange={(e) => {
-              setFile(e.target.files[0]);
-              console.log(e.target.files[0]);
-            }}
-            id="inputFile"
-            type="file"
-            className="hidden"
-          />
-          <label
-            htmlFor="inputFile"
-            type="button"
-            className="bg-transparent hover:bg-[#2d2d2d] transition-colors duration-200 flex items-center justify-center p-2 rounded-full"
-          >
-            <AttachIcon size={20} />
-          </label>
+          {modelInfo && (
+            <>
+              {/* Model select */}
+              {showOption === true ? (
+                <div
+                  onClick={() => setShowOption(false)}
+                  className="h-full flex justify-center items-center"
+                >
+                  <button
+                    type="button"
+                    className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
+                  >
+                    {modelInfo.icon}
+                    {text === "" && (
+                      <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
+                        {modelInfo.title}
+                      </span>
+                    )}
+                    {text === "" && <ChevronDown size={18} />}
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onClick={() => setShowOption(true)}
+                  className="h-full flex justify-center items-center"
+                >
+                  <button
+                    type="button"
+                    className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
+                  >
+                    {modelInfo.icon}
+                    {text === "" && (
+                      <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
+                        {modelInfo.title}
+                      </span>
+                    )}
+                    {text === "" && <ChevronDown size={18} />}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
 
           {/* Text Area */}
           <textarea
@@ -92,20 +115,6 @@ export default function ChatBox({
             className="flex-1 mb-0.5 bg-transparent text-[0.8rem] md:text-[0.95rem] lg:text-[1rem] resize-none border-none outline-none text-white placeholder:text-[#acaaaa] focus:ring-0 h-full overflow-y-auto"
             rows={1}
           />
-
-          {/* Model select */}
-          <button
-            type="button"
-            className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
-          >
-            <ModelIcon size={16} />
-            {text === "" && (
-              <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
-                Model
-              </span>
-            )}
-            {text === "" && <ChevronDown size={18} />}
-          </button>
 
           {/* Send Button */}
           <button

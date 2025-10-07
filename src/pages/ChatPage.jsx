@@ -18,7 +18,7 @@ import LoadingComponent from "../components/Chat/LoadingComponent";
 import AI from "../context/AI";
 import ChatBotOption from "../components/Chat/ChatBotOption";
 import ModelIcon from "../others/ModelIcon";
-import { Image } from "lucide-react";
+// import { Image } from "lucide-react";
 
 export default function ChatPage() {
   const [text, setText] = useState("");
@@ -26,6 +26,7 @@ export default function ChatPage() {
   const [chatBoxHeieht, setChatBoxHeieht] = useState(70);
   const [lodingMsg, setLodingMsg] = useState(false);
   const [AiMsgLoading, setAiMsgLoading] = useState(false);
+  const [AiImageLoading, setAiImageLoading] = useState(false);
   const [modelInfo, setModelInfo] = useState({
     title: "Auto",
     icon: <ModelIcon size={16} />,
@@ -46,7 +47,7 @@ export default function ChatPage() {
 
   // some
   const optionRef = useRef(null);
-  const [showOption, setShowOption] = useState(true);
+  const [showOption, setShowOption] = useState(false);
 
   useEffect(() => {
     if (logged === false) {
@@ -84,32 +85,56 @@ export default function ChatPage() {
           !aiCalledRef.current
         ) {
           aiCalledRef.current = true;
-          setAiMsgLoading(true);
-          const contextMsgs = data.map((m) => ({
-            role: m.type === "user" ? "user" : "model",
-            parts: [{ text: m.text }],
-          }));
+          if (data[0].model === "Auto") {
+            setAiMsgLoading(true);
+            const contextMsgs = data.map((m) => ({
+              role: m.type === "user" ? "user" : "model",
+              parts: [{ text: m.text }],
+            }));
 
-          const aiResponse = await AI.geminiText(data[0].text, contextMsgs);
-          setLodingMsg(false);
-          const aiChat = {
-            type: "ai",
-            text: aiResponse.content,
-            createdAt: Timestamp.now(),
-            imgLink: "",
-          };
+            const aiResponse = await AI.geminiText(data[0].text, contextMsgs);
+            const aiChat = {
+              type: "ai",
+              model: data[0].model,
+              text: aiResponse.content,
+              createdAt: Timestamp.now(),
+              imgLink: "",
+            };
 
-          if (AiMsgLoading === false) {
-            setmsgs((prev) => [...prev, aiChat]);
+            if (AiMsgLoading === false) {
+              setmsgs((prev) => [...prev, aiChat]);
+            }
+            // Update Firestore with AI message
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(aiChat),
+            });
+          } else if (data[0].model === "Images") {
+            setAiImageLoading(true);
+            const aiResponse = await AI.genImage(data[0].text);
+            const aiChat = {
+              type: "ai",
+              model: data[0].model,
+              text: "",
+              createdAt: Timestamp.now(),
+              imgLink: aiResponse.link,
+            };
+            console.log(aiChat);
+
+            if (AiMsgLoading === false) {
+              setmsgs((prev) => [...prev, aiChat]);
+            }
+            // Update Firestore with AI message
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(aiChat),
+            });
           }
-          // Update Firestore with AI message
-          await updateDoc(chatDataRef, {
-            chats: arrayUnion(aiChat),
-          });
-          setAiMsgLoading(false);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
+      } finally {
+        setLodingMsg(false);
+        setAiMsgLoading(false);
+        setAiImageLoading(false);
       }
     };
 
@@ -117,7 +142,7 @@ export default function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData, location.pathname]);
 
-  function onSend() {
+  function onSend(text) {
     async function fetchAIMag() {
       const subColId = location.pathname.split("/")[2];
       if (!subColId || !userData?.id) return;
@@ -129,41 +154,83 @@ export default function ChatPage() {
 
         // AI response if only one user message exists
         if (text) {
-          const userChat = {
-            type: "user",
-            text: text.trim(),
-            createdAt: Timestamp.now(),
-            imgLink: "",
-          };
+          setLodingMsg(true);
+          if (modelInfo.title === "Auto") {
+            console.log(modelInfo.title);
 
-          setmsgs((prev) => [...prev, userChat]);
+            const userChat = {
+              type: "user",
+              text: text.trim(),
+              model: modelInfo.title,
+              createdAt: Timestamp.now(),
+              imgLink: "",
+            };
 
-          await updateDoc(chatDataRef, {
-            chats: arrayUnion(userChat),
-          });
+            setmsgs((prev) => [...prev, userChat]);
 
-          const contextMsgs = msgs.map((m) => ({
-            role: m.type === "user" ? "user" : "model",
-            parts: [{ text: m.text }],
-          }));
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(userChat),
+            });
 
-          setAiMsgLoading(true);
-          let prompt = text.trim();
+            const contextMsgs = msgs.map((m) => ({
+              role: m.type === "user" ? "user" : "model",
+              parts: [{ text: m.text }],
+            }));
 
-          setText("");
-          const aiResponse = await AI.geminiText(prompt, contextMsgs);
-          const aiChat = {
-            type: "ai",
-            text: aiResponse.content,
-            createdAt: Timestamp.now(),
-            imgLink: "",
-          };
-          setmsgs((prev) => [...prev, aiChat]);
+            setAiMsgLoading(true);
+            let prompt = text.trim();
 
-          // Update Firestore with AI message
-          await updateDoc(chatDataRef, {
-            chats: arrayUnion(aiChat),
-          });
+            setText("");
+            const aiResponse = await AI.geminiText(prompt, contextMsgs);
+            const aiChat = {
+              type: "ai",
+              text: aiResponse.content,
+              createdAt: Timestamp.now(),
+              imgLink: "",
+              model: modelInfo.title,
+            };
+            setAiMsgLoading(false);
+            setmsgs((prev) => [...prev, aiChat]);
+
+            // Update Firestore with AI message
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(aiChat),
+            });
+          } else if (modelInfo.title === "Images") {
+            setAiImageLoading(true);
+            console.log(modelInfo.title);
+            const userChat = {
+              type: "user",
+              text: text.trim(),
+              model: modelInfo.title,
+              createdAt: Timestamp.now(),
+              imgLink: "",
+            };
+
+            if (AiMsgLoading === false) {
+              setmsgs((prev) => [...prev, userChat]);
+            }
+
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(userChat),
+            });
+            setText("");
+            const aiResponse = await AI.genImage(text);
+            const aiChat = {
+              type: "ai",
+              model: modelInfo.title,
+              text: "",
+              createdAt: Timestamp.now(),
+              imgLink: aiResponse.link,
+            };
+            setAiImageLoading(false);
+            setmsgs((prev) => [...prev, aiChat]);
+            // Update Firestore with AI message
+            await updateDoc(chatDataRef, {
+              chats: arrayUnion(aiChat),
+            });
+          }
+          setLodingMsg(false);
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -203,6 +270,7 @@ export default function ChatPage() {
           <ChatView
             msgs={msgs}
             AiMsgLoading={AiMsgLoading}
+            AiImageLoading={AiImageLoading}
             setLodingMsg={setLodingMsg}
           />
         )}

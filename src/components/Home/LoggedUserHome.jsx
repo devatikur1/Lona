@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import ChatBox from "./ChatBox";
@@ -14,12 +14,17 @@ import {
 import { app } from "../../context/firebase/Firebase";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../Chat/LoadingComponent";
+import ChatBotOption from "../Chat/ChatBotOption";
+import ModelIcon from "../../others/ModelIcon";
 
 export default function LoggedUserHome() {
   const [text, setText] = useState("");
-  const [file, setFile] = useState({});
   const [chatBoxHeieht, setChatBoxHeieht] = useState(70);
   const [loading, setLoading] = useState(false);
+  const [modelInfo, setModelInfo] = useState({
+    title: "Auto",
+    icon: <ModelIcon size={16} />,
+  });
 
   const { userData } = useContext(AppContext);
 
@@ -28,6 +33,10 @@ export default function LoggedUserHome() {
 
   // firebase
   const fireStore = getFirestore(app);
+
+  // some
+  const optionRef = useRef(null);
+  const [showOption, setShowOption] = useState(false);
 
   function generateUniqueId() {
     if (crypto?.randomUUID) {
@@ -68,6 +77,7 @@ export default function LoggedUserHome() {
           {
             type: "user",
             text,
+            model: modelInfo.title,
             createdAt: Timestamp.now(),
             imgLink: "",
           },
@@ -87,6 +97,20 @@ export default function LoggedUserHome() {
     }
   }
 
+  // Outside click detection
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionRef.current && !optionRef.current.contains(event.target)) {
+        setShowOption(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <aside className="flex">
       <section
@@ -101,14 +125,22 @@ export default function LoggedUserHome() {
         <Header />
         {!loading && <GuestMain chatBoxHeieht={chatBoxHeieht} />}
         {loading && <LoadingComponent chatBoxHeieht={chatBoxHeieht} />}
+        <ChatBotOption
+          optionRef={optionRef}
+          chatBoxHeieht={chatBoxHeieht}
+          showOption={showOption}
+          setModelInfo={setModelInfo}
+          setShowOption={setShowOption}
+        />
         <ChatBox
           text={text}
           setText={setText}
-          file={file}
-          setFile={setFile}
+          modelInfo={modelInfo}
           setChatBoxHeieht={setChatBoxHeieht}
           onSend={onSend}
           loading={loading}
+          setShowOption={setShowOption}
+          showOption={showOption}
         />
       </section>
     </aside>

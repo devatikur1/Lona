@@ -38,7 +38,7 @@ export default function ChatBox({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    onSend();
+    onSend(text);
   };
 
   return (

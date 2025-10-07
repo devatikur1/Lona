@@ -1,4 +1,4 @@
-import { createPartFromUri, GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API;
 
@@ -25,37 +25,24 @@ const AI = {
     }
   },
 
-  geminiTextAndImage: async (prompt, file, msgs = []) => {
+  genImage: async (prompt) => {
     try {
-      let imageUri = null;
+      let aspect = "1:1";
+      let speed = Date.now();
+      const imgURL = `https://api.a0.dev/assets/image?text=${encodeURIComponent(
+        prompt
+      )}&aspect=${aspect}&seed=${speed}`;
 
-      // যদি file থাকে, তাহলে Base64 URI তে convert করো
-      if (file && file instanceof File) {
-        imageUri = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file); // <-- converts File → Base64 URI
-        });
-      }
-
-      const chat = ai.chats.create({
-        name: "Lonas",
-        model: "gemini-2.5-flash",
-        history: [...msgs],
+      const res = await fetch(imgURL, {
+        method: "GET",
+        redirect: "follow",
       });
 
-      // text + image একসাথে পাঠাও
-      const response = await chat.sendMessage({
-        message: [
-          prompt,
-          ...(imageUri
-            ? [createPartFromUri(imageUri, file.type || "image/png")]
-            : []),
-        ],
-      });
+      if (!res.ok) throw new Error("Image fetch failed");    
 
-      return { type: "data", role: "model", content: response.text };
+      const finalImage = res.url;
+
+      return { type: "data", role: "model", link: finalImage };
     } catch (error) {
       console.error("Gemini Image Error:", error);
       return {
