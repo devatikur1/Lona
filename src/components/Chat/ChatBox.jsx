@@ -13,6 +13,7 @@ export default function ChatBox({
   lodingMsg,
   onSend,
   setChatBoxHeieht,
+  showOption,
   setShowOption,
 }) {
   const [formHeight, setFormHeight] = useState(36);
@@ -64,23 +65,43 @@ export default function ChatBox({
           {modelInfo && (
             <>
               {/* Model select */}
-              <div
-                onClick={() => setShowOption((prev) => !prev)}
-                className="h-full flex justify-center items-center"
-              >
-                <button
-                  type="button"
-                  className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
+              {showOption === true ? (
+                <div
+                  onClick={() => setShowOption(false)}
+                  className="h-full flex justify-center items-center"
                 >
-                  {modelInfo.icon}
-                  {text === "" && (
-                    <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
-                      {modelInfo.title}
-                    </span>
-                  )}
-                  {text === "" && <ChevronDown size={18} />}
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
+                  >
+                    {modelInfo.icon}
+                    {text === "" && (
+                      <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
+                        {modelInfo.title}
+                      </span>
+                    )}
+                    {text === "" && <ChevronDown size={18} />}
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onClick={() => setShowOption(true)}
+                  className="h-full flex justify-center items-center"
+                >
+                  <button
+                    type="button"
+                    className="bg-[#2d2d2d] hover:bg-[#3a3a3a] transition-colors duration-200 rounded-full px-3 py-1.5 flex items-center gap-2 "
+                  >
+                    {modelInfo.icon}
+                    {text === "" && (
+                      <span className="hidden md:flex md:text-[0.95rem] lg:text-[1rem]">
+                        {modelInfo.title}
+                      </span>
+                    )}
+                    {text === "" && <ChevronDown size={18} />}
+                  </button>
+                </div>
+              )}
             </>
           )}
 

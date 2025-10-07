@@ -223,6 +223,7 @@ export default function ChatPage() {
           lodingMsg={lodingMsg}
           setChatBoxHeieht={setChatBoxHeieht}
           onSend={onSend}
+          showOption={showOption}
           setShowOption={setShowOption}
         />
       </section>
