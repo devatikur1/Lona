@@ -14,7 +14,7 @@ import {
 import { app } from "../../context/firebase/Firebase";
 
 export default function Sidebar() {
-  const { showHeader, setShowHeader, userData } = useContext(AppContext);
+  const { showHeader, setShowHeader, userData, updateChats } = useContext(AppContext);
   const [showOption, setShowOption] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -94,7 +94,7 @@ export default function Sidebar() {
 
     getUserChatData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData]);
+  }, [updateChats, userData?.id]);
 
   // group by date
   const groupedItems = chats.reduce((acc, item) => {

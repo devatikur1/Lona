@@ -11,6 +11,7 @@ export default function AppContextProvider({ children }) {
   const [logged, setLogged] = useState(null);
   const [userData, setUserData] = useState({});
   const [userDataUpdate, setUserDataUpdate] = useState(0);
+  const [updateChats, setUpdateChats] = useState(0);
 
   const [text, setText] = useState("");
 
@@ -54,6 +55,9 @@ export default function AppContextProvider({ children }) {
         userAuth,
         text,
         setText,
+
+        updateChats,
+        setUpdateChats,
       }}
     >
       {children}

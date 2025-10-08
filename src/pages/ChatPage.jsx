@@ -41,7 +41,7 @@ export default function ChatPage() {
   const navigate = useNavigate();
 
   // context
-  const { userData, logged } = useContext(AppContext);
+  const { userData, logged, setUpdateChats } = useContext(AppContext);
 
   // ref
   const aiCalledRef = useRef(false);
@@ -65,7 +65,7 @@ export default function ChatPage() {
       try {
         setLodingMsg(true);
         const userRef = doc(fireStore, "chats", userData.id);
-        const chatDataRef = doc(userRef,"msg", subColId);
+        const chatDataRef = doc(userRef, "msg", subColId);
 
         const snapshot = await getDoc(chatDataRef);
 
@@ -148,6 +148,7 @@ export default function ChatPage() {
         setLodingMsg(false);
         setAiMsgLoading(false);
         setAiImageLoading(false);
+        setUpdateChats((prev) => prev + 1);
       }
     };
 
@@ -209,6 +210,7 @@ export default function ChatPage() {
             await updateDoc(chatDataRef, {
               chats: arrayUnion(aiChat),
             });
+            setUpdateChats((prev) => prev + 1);
           } else if (modelInfo.title === "Images") {
             setAiImageLoading(true);
             console.log(modelInfo.title);
@@ -242,6 +244,7 @@ export default function ChatPage() {
             await updateDoc(chatDataRef, {
               chats: arrayUnion(aiChat),
             });
+            setUpdateChats((prev) => prev + 1);
           }
           setLodingMsg(false);
         }
