@@ -116,7 +116,7 @@ export default function DextopSidebar({
                       <section className="flex flex-col gap-1">
                         {groupedItems[date].map((item) => (
                           <article key={item.id}>
-                            <a href={`c/${item.id}`}>
+                            <a href={`/c/${item.id}`}>
                               <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between gap-3 px-3 py-1.5 rounded-md">
                                 <span className="truncate text-xs md:text-[0.85rem] leading-none">
                                   {item.title}
