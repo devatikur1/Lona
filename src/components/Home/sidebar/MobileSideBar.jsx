@@ -130,7 +130,7 @@ export default function MobileSideBar({
                 >
                   <ul
                     style={{ borderLeft: "0.124rem solid #212123" }}
-                    className="flex flex-col gap-2 ml-7 mt-0 pl-3"
+                    className="flex flex-row-reverse gap-2 ml-7 mt-0 pl-3"
                   >
                     {groupedItems &&
                       Object.keys(groupedItems).map((date) => (
