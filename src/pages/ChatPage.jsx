@@ -65,7 +65,7 @@ export default function ChatPage() {
       try {
         setLodingMsg(true);
         const userRef = doc(fireStore, "chats", userData.id);
-        const chatDataRef = doc(userRef, subColId, "data");
+        const chatDataRef = doc(userRef,"msg", subColId);
 
         const snapshot = await getDoc(chatDataRef);
 
@@ -117,6 +117,7 @@ export default function ChatPage() {
             }
             // Update Firestore with AI message
             await updateDoc(chatDataRef, {
+              title: aiResponse.content.slice(0, 30),
               chats: arrayUnion(aiChat),
             });
           } else if (data[0].model === "Images") {
@@ -136,6 +137,7 @@ export default function ChatPage() {
             }
             // Update Firestore with AI message
             await updateDoc(chatDataRef, {
+              title: "Create images",
               chats: arrayUnion(aiChat),
             });
           }
@@ -161,7 +163,7 @@ export default function ChatPage() {
       try {
         setLodingMsg(true);
         const userRef = doc(fireStore, "chats", userData.id);
-        const chatDataRef = doc(userRef, subColId, "data");
+        const chatDataRef = doc(userRef, "msg", subColId);
 
         // AI response if only one user message exists
         if (text) {

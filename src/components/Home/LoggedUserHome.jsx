@@ -50,6 +50,7 @@ export default function LoggedUserHome() {
   // 🔹 Full async function to handle sending a message
   async function onSend(text) {
     setLoading(true);
+    if (!userData) return; 
     try {
       const userRef = doc(fireStore, "chats", userData.id);
       const userSnap = await getDoc(userRef);
@@ -67,7 +68,7 @@ export default function LoggedUserHome() {
 
       // 2️⃣ Generate new chat session id
       let newChatId = generateUniqueId();
-      const chatDataRef = doc(userRef, newChatId, "data");
+      const chatDataRef = doc(userRef, "msg", newChatId);
 
       // 3️⃣ Initial chat object
       const chatObject = {

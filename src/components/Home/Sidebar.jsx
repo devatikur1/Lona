@@ -4,6 +4,14 @@ import { AnimatePresence } from "motion/react";
 import MobileSideBar from "./sidebar/MobileSideBar";
 import DextopSidebar from "./sidebar/DextopSidebar";
 import SideOption from "./sidebar/SideOption";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
+import { app } from "../../context/firebase/Firebase";
 
 export default function Sidebar() {
   const { showHeader, setShowHeader, userData } = useContext(AppContext);
@@ -13,22 +21,83 @@ export default function Sidebar() {
 
   const optionRef = useRef(null);
 
+  // firebase
+  const fireStore = getFirestore(app);
+
+  // chats
+  const [chats, setChats] = useState([]);
+
   //  window width
   const getInitialWidth = () =>
     typeof window !== "undefined" ? window.innerWidth : 1200;
   const [windowWidth, setWindowWidth] = useState(getInitialWidth());
 
   // Sample history items (unique ids)
-  const historyItems = [
-    { id: "h1", title: "React SVG Component Syntax Correction", date: "Today" },
-    { id: "h2", title: "New conversation", date: "Today", disabled: true },
-    { id: "h3", title: "Vercel Domain Change React Project", date: "Today" },
-    { id: "h4", title: "React Image Feed Component Issues", date: "September" },
-    { id: "h5", title: "React Image Upload Component", date: "September" },
-  ];
+  useEffect(() => {
+    async function getUserChatData() {
+      try {
+        if (!userData?.id) return console.log("❌ User data is undefined!");
+
+        // Step 1: Main user doc
+        const userRef = doc(fireStore, "chats", userData.id);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) return console.log("❌ User not found!");
+
+        const mainUserData = userSnap.data();
+
+        // Step 2: Subcollection পড়া (msg নামে)
+        const msgRef = collection(userRef, "msg");
+        const msgSnap = await getDocs(msgRef);
+
+        const messages = msgSnap.docs.map((d) => {
+          const data = d.data();
+
+          // 🔹 Timestamp → JS Date
+          const createdAt = data.createdAt?.seconds
+            ? new Date(data.createdAt.seconds * 1000)
+            : new Date();
+
+          // 🔹 Date difference বের করা (আজ - creation date)
+          const today = new Date();
+          const diffDays = Math.floor(
+            (today.setHours(0, 0, 0, 0) - createdAt.setHours(0, 0, 0, 0)) /
+              (1000 * 60 * 60 * 24)
+          );
+
+          // 🔹 তারিখ label নির্ধারণ করা
+          let dateLabel;
+          if (diffDays === 0) dateLabel = "Today";
+          else if (diffDays === 1) dateLabel = "Yesterday";
+          else {
+            const monthName = createdAt.toLocaleString("default", {
+              month: "long",
+            });
+            dateLabel = `${monthName}`;
+          }
+
+          return {
+            id: d.id,
+            title: data.title || "New Chat",
+            date: dateLabel,
+          };
+        });
+
+        console.log("🧠 User Data:", mainUserData);
+        console.log("💬 All Messages:", messages);
+        setChats(messages);
+
+        setChats(messages);
+      } catch (err) {
+        console.error("⚠️ Error fetching chat data:", err);
+      }
+    }
+
+    getUserChatData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   // group by date
-  const groupedItems = historyItems.reduce((acc, item) => {
+  const groupedItems = chats.reduce((acc, item) => {
     acc[item.date] = acc[item.date] || [];
     acc[item.date].push(item);
     return acc;
@@ -53,22 +122,19 @@ export default function Sidebar() {
     setShowOption((prev) => !prev);
   };
 
-    // Outside click detection
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (
-          optionRef.current &&
-          !optionRef.current.contains(event.target) 
-        ) {
-          setShowOption(false);
-        }
-      };
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
+  // Outside click detection
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (optionRef.current && !optionRef.current.contains(event.target)) {
+        setShowOption(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
