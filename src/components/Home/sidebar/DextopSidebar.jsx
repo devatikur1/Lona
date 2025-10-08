@@ -6,6 +6,7 @@ import { EllipsisVertical, History, Search } from "lucide-react";
 import NewChat from "../../../others/NewChat";
 import clsx from "clsx";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function DextopSidebar({
   showHeader,
@@ -15,6 +16,7 @@ export default function DextopSidebar({
   userData,
   handleShowSideOption,
 }) {
+  const navigate = useNavigate();
   return (
     <>
       <motion.main
@@ -61,8 +63,12 @@ export default function DextopSidebar({
                 </div>
 
                 {/* New Chat */}
-                <div
-                  onClick={(e) => e.stopPropagation()}
+                <Link
+                  to={"/"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/");
+                  }}
                   className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2"
                 >
                   <div className="flex items-center">
@@ -77,7 +83,7 @@ export default function DextopSidebar({
                   >
                     Ctrl+N
                   </span>
-                </div>
+                </Link>
 
                 {/* History Header */}
                 <div
@@ -195,14 +201,18 @@ export default function DextopSidebar({
                   </div>
                 </div>
 
-                <div
-                  onClick={(e) => e.stopPropagation()}
+                <Link
+                  to={"/"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/");
+                  }}
                   className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-center p-2 rounded-lg mb-2"
                 >
                   <div className="flex items-center justify-center">
                     <NewChat size={20} />
                   </div>
-                </div>
+                </Link>
 
                 <div
                   onClick={(e) => e.stopPropagation()}
