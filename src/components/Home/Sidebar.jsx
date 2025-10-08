@@ -14,7 +14,8 @@ import {
 import { app } from "../../context/firebase/Firebase";
 
 export default function Sidebar() {
-  const { showHeader, setShowHeader, userData, updateChats } = useContext(AppContext);
+  const { showHeader, setShowHeader, userData, updateChats } =
+    useContext(AppContext);
   const [showOption, setShowOption] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -32,20 +33,18 @@ export default function Sidebar() {
     typeof window !== "undefined" ? window.innerWidth : 1200;
   const [windowWidth, setWindowWidth] = useState(getInitialWidth());
 
-  // Sample history items (unique ids)
+  // fetch user chats
   useEffect(() => {
     async function getUserChatData() {
       try {
         if (!userData?.id) return console.log("❌ User data is undefined!");
 
-        // Step 1: Main user doc
+        // main user doc
         const userRef = doc(fireStore, "chats", userData.id);
         const userSnap = await getDoc(userRef);
         if (!userSnap.exists()) return console.log("❌ User not found!");
 
-        const mainUserData = userSnap.data();
-
-        // Step 2: Subcollection পড়া (msg নামে)
+        // subcollection "msg"
         const msgRef = collection(userRef, "msg");
         const msgSnap = await getDocs(msgRef);
 
@@ -57,35 +56,28 @@ export default function Sidebar() {
             ? new Date(data.createdAt.seconds * 1000)
             : new Date();
 
-          // 🔹 Date difference বের করা (আজ - creation date)
+          // 🔹 Date difference বের করা
           const today = new Date();
-          const diffDays = Math.floor(
-            (today.setHours(0, 0, 0, 0) - createdAt.setHours(0, 0, 0, 0)) /
-              (1000 * 60 * 60 * 24)
-          );
+          const yesterday = new Date(today);
+          yesterday.setDate(today.getDate() - 1);
 
-          // 🔹 তারিখ label নির্ধারণ করা
-          let dateLabel;
-          if (diffDays === 0) dateLabel = "Today";
-          else if (diffDays === 1) dateLabel = "Yesterday";
-          else {
-            const monthName = createdAt.toLocaleString("default", {
-              month: "long",
-            });
-            dateLabel = `${monthName}`;
-          }
+          let dateLabel = "";
+          if (createdAt.toDateString() === today.toDateString())
+            dateLabel = "Today";
+          else if (createdAt.toDateString() === yesterday.toDateString())
+            dateLabel = "Yesterday";
+          else
+            dateLabel = createdAt.toLocaleString("default", { month: "long" });
 
           return {
             id: d.id,
             title: data.title || "New Chat",
+            createdAt,
             date: dateLabel,
           };
         });
 
-        console.log("🧠 User Data:", mainUserData);
-        console.log("💬 All Messages:", messages);
-        setChats(messages);
-
+        // set chats state
         setChats(messages);
       } catch (err) {
         console.error("⚠️ Error fetching chat data:", err);
@@ -96,12 +88,30 @@ export default function Sidebar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateChats, userData?.id]);
 
-  // group by date
+  // group chats by date
   const groupedItems = chats.reduce((acc, item) => {
-    acc[item.date] = acc[item.date] || [];
+    if (!acc[item.date]) acc[item.date] = [];
     acc[item.date].push(item);
     return acc;
   }, {});
+
+  // sort keys: Today > Yesterday > Month-wise (descending)
+  const sortedKeys = Object.keys(groupedItems).sort((a, b) => {
+    if (a === "Today") return -1;
+    if (b === "Today") return 1;
+    if (a === "Yesterday") return -1;
+    if (b === "Yesterday") return 1;
+
+    // For month-wise: compare by first message date
+    const aDate = groupedItems[a][0]?.createdAt;
+    const bDate = groupedItems[b][0]?.createdAt;
+    return bDate - aDate; // descending
+  });
+
+  const groupedSortedChats = {};
+  sortedKeys.forEach((key) => {
+    groupedSortedChats[key] = groupedItems[key];
+  });
 
   // resize listener
   useEffect(() => {
