@@ -6,7 +6,7 @@ import { EllipsisVertical, History, Search } from "lucide-react";
 import NewChat from "../../../others/NewChat";
 import clsx from "clsx";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function DextopSidebar({
   showHeader,
@@ -16,7 +16,6 @@ export default function DextopSidebar({
   userData,
   handleShowSideOption,
 }) {
-  const navigate = useNavigate();
   return (
     <>
       <motion.main
@@ -65,10 +64,7 @@ export default function DextopSidebar({
                 {/* New Chat */}
                 <Link
                   to={"/"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate("/");
-                  }}
+                  onClick={(e) => e.stopPropagation()}
                   className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2"
                 >
                   <div className="flex items-center">
@@ -203,10 +199,7 @@ export default function DextopSidebar({
 
                 <Link
                   to={"/"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate("/");
-                  }}
+                  onClick={(e) => e.stopPropagation()}
                   className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-center p-2 rounded-lg mb-2"
                 >
                   <div className="flex items-center justify-center">

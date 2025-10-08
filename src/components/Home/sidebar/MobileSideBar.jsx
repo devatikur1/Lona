@@ -5,7 +5,7 @@ import ToggleBtn from "../../../others/ToggleBtn";
 import Logo from "../../../others/Logo";
 import { motion } from "motion/react";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function MobileSideBar({
   setShowHeader,
@@ -13,7 +13,6 @@ export default function MobileSideBar({
   userData,
   handleShowSideOption,
 }) {
-  const navigate = useNavigate();
   return (
     <>
       {/* Overlay */}
@@ -74,10 +73,8 @@ export default function MobileSideBar({
               {/* New Chat */}
               <Link
                 to={"/"}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate("/");
-                }}
+                onClick={(e) => 
+                  e.stopPropagation()}
                 className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between px-4 py-2 rounded-lg mb-2"
               >
                 <div className="flex items-center">
