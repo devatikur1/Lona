@@ -122,7 +122,7 @@ export default function LoggedUserHome() {
       >
         <Sidebar />
       </section>
-      <section className="relative w-full h-screen flex flex-col justify-start items-start touch-none overflow-hidden">
+      <section className="relative w-full h-screen flex flex-col justify-start items-center touch-none overflow-hidden">
         <Header />
         {!loading && <GuestMain chatBoxHeieht={chatBoxHeieht} />}
         {loading && <LoadingComponent chatBoxHeieht={chatBoxHeieht} />}

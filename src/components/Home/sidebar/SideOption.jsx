@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
 
@@ -14,7 +14,7 @@ const SideOption = ({ optionRef, showOption, x, y }) => {
   }
   if (y !== undefined && y !== null) {
     // If y is number, subtract a vertical offset so the menu appears above the click point.
-    style.top = typeof y === "number" ? `${y - 120}px` : y;
+    style.top = typeof y === "number" ? `${y-60}px` : y;
     style.bottom = "auto";
   }
 
@@ -39,14 +39,6 @@ const SideOption = ({ optionRef, showOption, x, y }) => {
               </li>
             </Link>
 
-            <Link>
-              <li className="flex items-center gap-2 hover:bg-[#1f1f22] px-4 py-1.5 rounded-xl text-white cursor-pointer">
-                <Settings size={15} />
-                <span className="text-sm">Settings</span>
-              </li>
-            </Link>
-
-            <hr className="w-[90%] mx-auto my-1.5 mb-1 h-[1.5px] rounded-full bg-[#252525] border-none ring-0 outline-none" />
             <li
               onClick={() => userAuth.logOut()}
               className="flex items-center gap-2 hover:bg-[#1f1f22] px-4 py-1.5 rounded-xl cursor-pointer"
