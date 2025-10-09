@@ -126,7 +126,6 @@ export default function Sidebar() {
     "fixed z-50 md:relative min-h-screen max-h-screen flex flex-col border-r border-[#212123] bg-[#080808] overflow-hidden";
 
   const handleShowSideOption = (e) => {
-    console.log(e);
     setX(5);
     setY(e.target.y - 50);
     setShowOption((prev) => !prev);
