@@ -25,7 +25,9 @@ export default function AppContextProvider({ children }) {
       if (user && localStorage.getItem("logged") == "true") {
         const docRef = doc(fireStore, "users", user.uid);
         const docSnap = await getDoc(docRef);
-        if (docSnap.data() > 0) {
+        console.log(docSnap.data());
+        
+        if (docSnap.data()) {
           setUserData(docSnap.data());
           setLogged(true);
         } else {

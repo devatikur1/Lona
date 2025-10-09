@@ -19,7 +19,7 @@ export const saveUserData = async (
     } else {
       try {
         // Only attempt upload if addImageInStorage succeeds; otherwise fall back to original
-        uploadedUrl = (await addImageInStorage(photoURL)) || photoURL;
+        uploadedUrl = (await addImageInStorage(photoURL)) || null;
       } catch (err) {
         // Fail open: keep original photoURL so user creation proceeds
         uploadedUrl = photoURL;
