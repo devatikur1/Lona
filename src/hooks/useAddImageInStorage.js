@@ -18,7 +18,6 @@ export const addImageInStorage = async (link) => {
     });
 
     const data = await res.json();
-    console.log("Upload result:", data);
 
     return data?.data?.url || null;
   } catch (err) {
