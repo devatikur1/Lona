@@ -71,7 +71,7 @@ const userAuth = {
         provider: "email",
         location,
       });
-      localStorage.setItem("logged", false);
+      localStorage.setItem("logged", true);
       return { type: "data", user };
     } catch (error) {
       console.error("SignUp Error:", error);
@@ -94,6 +94,7 @@ const userAuth = {
         location,
         res.user.photoURL
       );
+      localStorage.setItem("logged", true);
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("Google Login Error:", error);
@@ -112,10 +113,11 @@ const userAuth = {
       await saveUserData(
         fireStore,
         res.user,
-        "google",
+        "github",
         location,
         res.user.photoURL
       );
+      localStorage.setItem("logged", true);
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("GitHub Login Error:", error);
@@ -134,10 +136,11 @@ const userAuth = {
       await saveUserData(
         fireStore,
         res.user,
-        "google",
+        "twitter",
         location,
         res.user.photoURL
       );
+      localStorage.setItem("logged", true);
       return { type: "data", user: res.user };
     } catch (error) {
       console.error("Twitter Login Error:", error);

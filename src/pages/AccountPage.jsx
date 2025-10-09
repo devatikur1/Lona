@@ -1,9 +1,7 @@
-import React, { useContext, useEffect } from 'react'
-import { AppContext } from '../context/AppContext';
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function AccountPage() {
-  const { logged } = useContext(AppContext);
     let navigate = useNavigate();
 
     useEffect(() => {
