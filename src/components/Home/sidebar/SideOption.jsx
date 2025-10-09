@@ -32,7 +32,7 @@ const SideOption = ({ optionRef, showOption, x, y }) => {
           style={style}
         >
           <ul className="w-full flex flex-col gap-1 py-2 px-2">
-            <Link to={"account"}>
+            <Link to={"/account"}>
               <li className="flex items-center gap-2 hover:bg-[#1f1f22] px-4 py-1.5 rounded-xl text-white cursor-pointer">
                 <User size={18} />
                 <span className="text-sm">Account</span>
