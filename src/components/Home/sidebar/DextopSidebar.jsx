@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../../others/Logo";
 import ToggleBtn from "../../../others/ToggleBtn";
 import { EllipsisVertical, History, Search } from "lucide-react";
 import NewChat from "../../../others/NewChat";
 import clsx from "clsx";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function DextopSidebar({
   showHeader,
@@ -16,6 +16,14 @@ export default function DextopSidebar({
   userData,
   handleShowSideOption,
 }) {
+  const [location, setLocation] = useState("");
+  const locationPathName = useLocation();
+  useEffect(() => {
+    setLocation(locationPathName.pathname.split("/")[2]);
+    console.log(locationPathName.pathname.split("/")[2]);
+    
+  }, [locationPathName]);
+
   return (
     <>
       <motion.main
@@ -28,7 +36,7 @@ export default function DextopSidebar({
         {/* when expanded show full view, when collapsed show compact view */}
         {showHeader ? (
           <section className="flex flex-col justify-between h-screen">
-            <section>
+            <section className="max-h-[80%]">
               <div className="px-3 py-3">
                 {/* Logo + toggle */}
                 <article
@@ -115,7 +123,7 @@ export default function DextopSidebar({
                       duration: 0.3,
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="scrollCustom flex-1 overflow-y-auto px-3 pb-3 mb-3"
+                    className="scrollCustom max-h-[80%] flex-1 overflow-y-auto px-3 pb-3 mb-3"
                   >
                     <ul
                       style={{ borderLeft: "0.124rem solid #212123" }}
@@ -128,23 +136,32 @@ export default function DextopSidebar({
                               {date}
                             </div>
                             <section className="flex flex-col gap-1">
-                              {groupedItems[date].map((item) => (
-                                <article key={item.id}>
-                                  <a href={`/c/${item.id}`}>
-                                    <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between gap-3 px-3 py-1.5 rounded-md">
-                                      <span className="truncate text-xs md:text-[0.85rem] leading-none">
-                                        {item.title}
-                                      </span>
-                                      <span
-                                        style={{ color: "hsl(0 0% 63.9%)" }}
-                                        className="newChatKeyWord leading-none text-xs"
+                              {groupedItems[date].map((item) => {
+                                let isActive = (location === item.id);
+                                return (
+                                  <article key={item.id}>
+                                    <Link to={`/c/${item.id}`}>
+                                      <div
+                                        className={clsx(
+                                          "newChatOption hover:bg-[#1f1f22] flex items-center justify-between gap-3 px-3 py-1.5 rounded-md",
+                                          isActive === true && "bg-[#1f1f22]",
+                                          isActive === false && "bg-[#121212]"
+                                        )}
                                       >
-                                        <EllipsisVertical size={16} />
-                                      </span>
-                                    </div>
-                                  </a>
-                                </article>
-                              ))}
+                                        <span className="truncate text-xs md:text-[0.85rem] leading-none">
+                                          {item.title}
+                                        </span>
+                                        <span
+                                          style={{ color: "hsl(0 0% 63.9%)" }}
+                                          className="newChatKeyWord leading-none text-xs"
+                                        >
+                                          <EllipsisVertical size={16} />
+                                        </span>
+                                      </div>
+                                    </Link>
+                                  </article>
+                                );
+                              })}
                             </section>
                           </aside>
                         ))}

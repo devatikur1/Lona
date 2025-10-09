@@ -5,7 +5,8 @@ import ToggleBtn from "../../../others/ToggleBtn";
 import Logo from "../../../others/Logo";
 import { AnimatePresence, motion } from "motion/react";
 import emptyProfile from "../../../assets/blank_profile_picture.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 export default function MobileSideBar({
   setShowHeader,
@@ -13,6 +14,7 @@ export default function MobileSideBar({
   userData,
   handleShowSideOption,
 }) {
+  const location = useLocation();
   return (
     <>
       {/* Overlay */}
@@ -37,7 +39,7 @@ export default function MobileSideBar({
       >
         <main className="flex flex-col justify-between h-full">
           {/* -------------------top part------------------- */}
-          <section>
+          <section className="max-h-[80%]">
             {/* Header */}
             <div onClick={(e) => e.stopPropagation()} className="px-3 py-3">
               <article className="flex justify-between items-center px-2 pb-3 pt-3 mb-3">
@@ -126,7 +128,7 @@ export default function MobileSideBar({
                     duration: 0.3,
                   }}
                   onClick={(e) => e.stopPropagation()}
-                  className="scrollCustom flex-1 overflow-y-auto px-3 pb-3 mb-3"
+                  className="scrollCustom max-h-[80%] flex-1 overflow-y-auto px-3 pb-3 mb-3"
                 >
                   <ul
                     style={{ borderLeft: "0.124rem solid #212123" }}
@@ -138,24 +140,35 @@ export default function MobileSideBar({
                           <div className="py-1 pl-1 text-[0.8rem] md:text-[0.9rem] font-thin text-gray-400 sticky top-0 bg-[#080808] z-20">
                             {date}
                           </div>
-                          <section className="flex flex-col gap-1">
-                            {groupedItems[date].map((item) => (
-                              <article key={item.id}>
-                                <a href={`/c/${item.id}`}>
-                                  <div className="newChatOption bg-[#121212] hover:bg-[#1f1f22] flex items-center justify-between gap-3 px-3 py-1.5 rounded-md">
-                                    <span className="truncate text-xs md:text-[0.85rem] leading-none">
-                                      {item.title}
-                                    </span>
-                                    <span
-                                      style={{ color: "hsl(0 0% 63.9%)" }}
-                                      className="newChatKeyWord leading-none text-xs"
+                          <section className="flex flex-col-reverse gap-1">
+                            {groupedItems[date].map((item) => {
+                              let isActive =
+                                location.pathname === `/c/${item.id}`;
+
+                              return (
+                                <article key={item.id}>
+                                  <Link>
+                                    <div
+                                      className={clsx(
+                                        "newChatOption hover:bg-[#1f1f22] flex items-center justify-between gap-3 px-3 py-1.5 rounded-md",
+                                        isActive === true && "bg-[#1f1f22]",
+                                        isActive === false && "bg-[#121212]"
+                                      )}
                                     >
-                                      <EllipsisVertical size={16} />
-                                    </span>
-                                  </div>
-                                </a>
-                              </article>
-                            ))}
+                                      <span className="truncate text-xs md:text-[0.85rem] leading-none">
+                                        {item.title}
+                                      </span>
+                                      <span
+                                        style={{ color: "hsl(0 0% 63.9%)" }}
+                                        className="newChatKeyWord leading-none text-xs"
+                                      >
+                                        <EllipsisVertical size={16} />
+                                      </span>
+                                    </div>
+                                  </Link>
+                                </article>
+                              );
+                            })}
                           </section>
                         </aside>
                       ))}
