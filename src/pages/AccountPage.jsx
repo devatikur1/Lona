@@ -7,9 +7,7 @@ export default function AccountPage() {
     let navigate = useNavigate();
 
     useEffect(() => {
-      if (!logged) {
         navigate("/account/sign-up");
-      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [logged]);
   return (

@@ -13,7 +13,7 @@ export default function Register() {
 
   useEffect(() => {
     if (logged === true) {
-      navigate("/account");
+      navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logged]);
