@@ -63,7 +63,6 @@ export default function LoggedUserHome() {
           email: userData.email || "",
           createdAt: Timestamp.now(),
         });
-        console.log("New user doc created ✅");
       }
 
       // 2️⃣ Generate new chat session id

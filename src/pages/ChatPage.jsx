@@ -86,7 +86,6 @@ export default function ChatPage() {
         }
 
         const data = snapshot.data().chats || [];
-        console.log("Messages:", data);
         setmsgs(data);
 
         // AI response if only one user message exists
@@ -130,7 +129,6 @@ export default function ChatPage() {
               createdAt: Timestamp.now(),
               imgLink: aiResponse.link,
             };
-            console.log(aiChat);
 
             if (AiMsgLoading === false) {
               setmsgs((prev) => [...prev, aiChat]);
@@ -170,7 +168,6 @@ export default function ChatPage() {
         if (text) {
           setLodingMsg(true);
           if (modelInfo.title === "Auto") {
-            console.log(modelInfo.title);
 
             const userChat = {
               type: "user",
@@ -213,7 +210,6 @@ export default function ChatPage() {
             setUpdateChats((prev) => prev + 1);
           } else if (modelInfo.title === "Images") {
             setAiImageLoading(true);
-            console.log(modelInfo.title);
             const userChat = {
               type: "user",
               text: text.trim(),
