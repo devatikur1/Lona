@@ -276,7 +276,7 @@ export default function ChatPage() {
       >
         <Sidebar />
       </section>
-      <section className="relative w-full h-screen flex flex-col justify-start items-start touch-none overflow-hidden">
+      <section className="relative w-full h-screen flex flex-col justify-start items-center touch-none overflow-hidden">
         <Header />
         {msgs.length !== 0 && (
           <ChatView

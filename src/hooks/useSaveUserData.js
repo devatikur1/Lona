@@ -23,8 +23,6 @@ export const saveUserData = async (fireStore, user, provider, location, photoURL
       profileImgUrl: uploadedUrl,
       atSignIn: serverTimestamp(),
       atLastLogin: serverTimestamp(),
-      provider,
-      location,
       isDisable: false,
     },
     { merge: true }
